@@ -1,0 +1,32 @@
+.o3_tooltip {
+	position: absolute;
+	left: -1000px;
+	top: -1000px;
+	display: block;
+	visibility: hidden;		
+	opacity: 0.0;
+	filter: alpha(opacity: 0);
+	-moz-transition: opacity 0.3s ease-in, visibility 0.3s ease-in;
+	-webkit-transition: opacity 0.3s ease-in, visibility 0.3s ease-in;
+	-o-transition: opacity 0.3s ease-in, visibility 0.3s ease-in;
+	transition: opacity 0.3s ease-in, visibility 0.3s ease-in;
+
+	z-index: 20000;
+
+	font-size: 12px;
+	color: #FFFFFF;
+	background: #333;
+	font-family: sans-serif;
+	
+	padding: 4px;
+	padding-left: 7px;
+	padding-right: 7px;
+	box-shadow: 1px 1px 2px #666666;
+	border-radius: 4px;	
+}
+
+.o3_tooltip_show {
+	visibility: visible;		
+	opacity: 1.0;
+	filter: alpha(opacity: 100);
+}

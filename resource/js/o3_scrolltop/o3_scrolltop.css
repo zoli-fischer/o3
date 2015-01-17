@@ -1,0 +1,47 @@
+.o3_scrolltop {
+	visibility: hidden;
+	position: fixed;
+	right: 20px;
+	bottom: 20px;
+	background: #666666;  
+	height: 40px;
+	width: 40px;  
+	line-height: 40px;
+	text-align: center;
+	border-radius: 20px;
+	border: 1px solid #333333;  
+	z-index: 10;
+	opacity: 0;
+	filter: alpha(opacity: 0);
+	-moz-transition: opacity 0.5s linear;
+	-webkit-transition: opacity 0.5s linear;
+	-o-transition: opacity 0.5s linear;
+	transition: opacity 0.5s linear;
+	overflow: hidden;
+	cursor: pointer;
+}
+
+.o3_scrolltop span {	
+	position: relative;
+	top: 12%;
+	color: #FFFFFF;
+	font-weight: bold;
+	font-size: 32px;
+	font-style: none;
+	font-family: sans-serif;
+}
+
+.o3_scrolltop:hover  {
+	text-decoration: none !important;
+	background: #FFFFFF;  
+}
+
+.o3_scrolltop:hover span {
+	color: #666666;
+}
+
+.o3_scrolltop_show {	
+	visibility: visible;
+	opacity: 1;
+	filter: alpha(opacity: 100);
+}

@@ -1,0 +1,12 @@
+#Change default directory page
+DirectoryIndex index.php
+
+#Prevent viewing of .htaccess file
+<Files ~ "^.*\.([Ll][Oo][Gg]|[Hh][Tt][Aa][Cc][Cc][Ee][Ss][Ss])">
+ Order allow,deny
+ Deny from all
+ Satisfy All
+</Files>
+
+#Prevent directory listings
+Options All -Indexes

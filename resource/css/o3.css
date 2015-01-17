@@ -1,0 +1,20 @@
+/*errors*/
+.o3_msg_error {
+    color: #dd4b39 !important;
+}
+
+/*form & input*/
+.o3_field_error {
+	border: 1px solid #dd4b39 !important;	
+}
+
+.o3_mandatory {
+	background-color: #ffffcc !important;
+}
+
+.o3_disabled_selector:disabled,
+.o3_disabled {
+	opacity: 0.6 !important;
+	filter: alpha( opacity: 0.6 ) !important;
+	cursor: not-allowed !important;
+}
