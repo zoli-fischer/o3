@@ -1,8 +1,8 @@
 # O3 Engine for PHP
 
-With using O3 you can create php projects faster and better. 
+O3 Engine makes the creation and maintain of PHP projects easyer, faster and better. 
 
-O3 includes a set of classes and functions that are basic for every project, you don't need to waste time on collecting them.
+O3 includes a set of classes and functions that are basic for every project, the developers don't need to waste time on collecting them.
 
 > Current version: v1.0.0b
 
