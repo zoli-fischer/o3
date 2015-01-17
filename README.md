@@ -6,13 +6,13 @@ O3 Engine includes a set of classes and functions that are basic for every proje
 
 > Current version: v1.0.0b
 
-## Documentation
-
-[Click here for documentation](https://github.com/zoli-fischer/o3/wiki)
-
 ## Requirements
 
 PHP 5.3.x (http://php.net)
+
+## Documentation
+
+[Click here for documentation](https://github.com/zoli-fischer/o3/wiki)
 
 ## Download
 

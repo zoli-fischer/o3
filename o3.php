@@ -7,7 +7,7 @@
  * O3 includes a set of classes and functions that are basic for every project, you don't need to waste time on collecting them.
  *
  * @package o3
- * @link    todo: add url
+ * @link    todo: https://github.com/zoli-fischer/o3/wiki/O3-Class
  * @author  Zotlan Fischer <zoli_fischer@yahoo.com>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
@@ -53,8 +53,6 @@ class o3 {
 	
 	/**
 	 * O3 constructor starts the debuger and logger 
-	 *
-	 * @return void
 	 */	
 	public function __construct() {
 
@@ -183,8 +181,15 @@ class o3 {
 	/*
 	* Add resource or framework to load
 	*
-	* Framework - $names string one or more framework name with comma sep.
-	* Resource - $url - url to the file, $path - path to the file, $type - type of resource javascript or stylesheet
+	* Param count: 1
+	*
+	* @param string $names - One or more framework name with comma seperated
+	*
+	* Param count: 3
+	*
+	* @param string $url Optional. URL to the file
+ 	* @param string $path Optional. Path to the file 
+	* @param string $type Optional. Type of resource. Accepted values: javascript, stylesheet. Default: javascript
 	*
 	* @return void
 	*/
@@ -240,8 +245,9 @@ class o3 {
 
 	/*
 	* Add framework to load
-	* $name - $name Name of framework
-	* $data - $data List of files from framework
+	*
+	* @param string $name Name of framework
+	* @param string $data List of files from framework
 	*
 	* @return void
 	*/
@@ -254,8 +260,9 @@ class o3 {
 	
 	/*
 	* Add inline to html head
-	* $url - $content
-	* $type - Type of resource empty string, javascript or stylesheet
+	*
+	* @param string $content Inline code
+	* @param string $type Optional. Type of code. Accepted values: javascript, stylesheet. Default: javascript
 	*
 	* @return void
 	*/
@@ -404,29 +411,39 @@ class o3_ajax_result {
 	}
 
 	/*
-	* Check field is posted 
+	* Check if field is posted
+	*
+	* @param string $field Field name
+	* @return boolean True if posted else false
 	*/
 	public function is( $field ) {
 		return isset($_POST[$field]);
 	}
 
 	/*
-	* Check value of field posted 
+	* Get value of posted field 
+	*
+	* @param string $field Field name
+	* @return string/NULL NULL if field not set else value of posted field 
 	*/
 	public function value( $field ) {
 		return $this->is( $field) ? $_POST[$field] : null;
 	}
 
 	/*
-	* Get array with all the poster fields
+	* Get array with all the posted fields
+	*
+	* @return array 
 	*/
 	public function all() {
 		return $_POST;
 	}
 
 	/*
-	* Set success
-	* @return self
+	* Set success to the request
+	*
+	* @param string $success_msg Success message
+	* @return void
 	*/
 	public function success( $success_msg = '' ) {
 		$this->success_ = true;
@@ -440,8 +457,10 @@ class o3_ajax_result {
 	}	
 			
 	/*
-	* Set error
-	* @return self
+	* Set error to the request
+	*
+	* @param string $error_msg Error message
+	* @return void
 	*/
 	public function error( $error_msg = null ) {
 		$this->success_ = false;
@@ -455,8 +474,10 @@ class o3_ajax_result {
 	}
 
 	/*
-	* Set fail
-	* @return self
+	* Set fail to the request
+	*
+	* @param string $error_msg Error message
+	* @return void
 	*/
 	public function fail( $error_msg = null ) {
 		$this->success_ = false;
