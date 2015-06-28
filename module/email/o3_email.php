@@ -97,18 +97,18 @@ class o3_email {
 	 * Constructor of email
 	 * @return void
 	 */
-  public function __construct() {
-  	;
-  }
+	public function __construct() {
+		;
+	}
   
-  /**
+  	/**
 	 * Set the path to the folder with email templates json-s
 	 * @param string $path
 	 * @return void
 	 */
-  function set_dir( $path ) {
-  	$this->template_dir = $path;
-  }
+	function set_dir( $path ) {
+		$this->template_dir = $path;
+	}
   
   /**
 	 * Function sets the parent object
@@ -116,9 +116,9 @@ class o3_email {
 	 * @param object $parent Parent object	
 	 * @return object
 	 */	
-  function set_parent( $parent ) {
-  	return $this->parent = &$parent;
-  }
+	function set_parent( $parent ) {
+		return $this->parent = &$parent;
+	}
   
   	//send mail by index
 	//o3_email_data with send/mail informaton 
@@ -206,10 +206,7 @@ class o3_email {
 				$to_tmp[] = $value[1];
 			}
 		}
-		//replace param tags 
-		$message = str_replace( $from_tmp, $to_tmp, $message );
-		$subject = str_replace( $from_tmp, $to_tmp, $subject );
-		
+
 		//run object callbacks
 		if ( isset($this) && count($this->send_callbacks) > 0 ) {
 			foreach ( $this->send_callbacks as $key => $value ) {
@@ -233,6 +230,10 @@ class o3_email {
 				$subject = call_user_func( array( $send_callback[0], $send_callback[1] ), $subject );
 			}
 		}
+
+		//replace param tags 
+		$message = str_replace( $from_tmp, $to_tmp, $message );
+		$subject = str_replace( $from_tmp, $to_tmp, $subject );		
 		
 		if ( $content_type != 'text/plain' && strlen(trim($message)) > 0 ) {
 			/*
@@ -252,6 +253,8 @@ class o3_email {
 		if ( isset($this) && $this->is_test() ) {
 			$message .= $content_type == 'text/plain' ? "\n\nTest email. Original to: ".$to : '<div style="padding: 20px; background: #CC0000; color: #FFFFFF;">Test email. Original to: '.$to.'</div>';
 			$to = $this->test();
+			$cc = '';
+			$bcc = '';
 		}
 		
 		//send email		
@@ -510,7 +513,7 @@ class o3_email_attachment {
 * @param string $to To email address
 * @param string $subject (optional) Email subject 
 * @param string $message (optional) Email message 
-* @param string $from (optional) From email address
+* @param string/array $from (optional) From email address. If array then first element is from email second is the replay-to email.
 * @param string $cc (optional) Carbon copy to email address
 * @param string $bcc (optional) Blind carbon copy to email address
 * @param array|o3_email_attachment $attachment (optional) Array with attachments or one attachment object.
@@ -556,7 +559,17 @@ $attachment
 		$message = o3_convert($message);
 	}
 	
-	$headers .= "From: ".$from."\r\n";
+	//check if Reply-To to set
+	if ( is_array($from) ) {
+		if ( isset($from[0]) )
+			$headers .= "From: ".$from[0]."\r\n";
+		if ( isset($from[1]) )
+			$headers .= "Reply-To: ".$from[1]."\r\n";
+	} else {
+		$headers .= "From: ".$from."\r\n";
+	}
+
+
 	if ( $cc != '' ) {
 		$headers .= "Cc: ".$cc."\r\n";
 	}

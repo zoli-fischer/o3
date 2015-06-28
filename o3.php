@@ -67,7 +67,8 @@ class o3 {
 		$this->debug->add_shutdown_callback( array( $this->log, 'append_bottom' ) );
 
 		//inject code in buffer
-		$this->debug->add_ob_start_callback( array( $this, 'html_head_inject' ) );
+		$this->debug->add_ob_start_callback( array( $this, 'html_head_inject' ) );		
+		$this->debug->add_ob_start_callback( array( $this, 'html_body_inject' ) );
 
 		//add general o3 javascript variables
 		$this->head_inline( 'var O3_ERR_GENERAL = \''.addslashes(O3_ERR_GENERAL).'\';', 'javascript' );
@@ -83,16 +84,28 @@ class o3 {
 
 		//sprintf
 		$this->head_framework( 'sprintf', array( array( O3_URL.'/resource/js/lib/sprintf/sprintf-latest.min.js', O3_RES_DIR.'/js/lib/sprintf/sprintf-latest.min.js' ) ) );			
-
+				
 		//upclick
-		$this->head_framework( 'o3_upclick', array( array( O3_URL.'/resource/js/o3_upclick/o3_upclick.js', O3_RES_DIR.'/js/o3_upclick/o3_upclick.js' ) ) );			
+		$this->head_framework( 'o3_upclick', array( array( O3_URL.'/resource/js/o3_upclick/o3_upclick.js', O3_RES_DIR.'/js/o3_upclick/o3_upclick.js' ) ) );
 
 		//awesome
-		$this->head_framework( 'awesome', array( array( O3_URL.'/resource/css/lib/awesome/awesome.min.css', '', 'stylesheet' ) ) );			
+		$this->head_framework( 'awesome', array( array( O3_URL.'/resource/css/lib/awesome/awesome.min.css', '', 'stylesheet' ) ) );
+
+		//hammer
+		$this->head_framework( 'hammer', array( array( O3_URL.'/resource/js/lib/hammer/hammer.min.js', O3_RES_DIR.'/js/lib/hammer/hammer.min.js' ),
+												array( O3_URL.'/resource/js/lib/hammer/jquery.hammer.js', O3_RES_DIR.'/js/lib/hammer/jquery.hammer.js' ) ) );	
+
+		//less
+		$this->head_framework( 'less', array( array( O3_URL.'/resource/js/lib/less/less-latest.min.js', '' ) ) );		
+
+		//bootstrap
+		$this->head_framework( 'bootstrap', array( array( O3_URL.'/resource/js/lib/bootstrap/3-latest/js/bootstrap.min.js', O3_RES_DIR.'/js/lib/bootstrap/3-latest/js/bootstrap.min.js' ),
+											      array( O3_URL.'/resource/js/lib/bootstrap/3-latest/css/bootstrap.min.css', '', 'stylesheet' ) ) );
 
 		//o3
 		$this->head_framework( 'o3', array( array( O3_URL.'/resource/js/o3.js', O3_RES_DIR.'/js/o3.js' ),
 											array( O3_URL.'/resource/css/o3.css', O3_RES_DIR.'/css/o3.css', 'stylesheet' ) ) );
+		$this->head_framework( 'o3_no_css', array( array( O3_URL.'/resource/js/o3.js', O3_RES_DIR.'/js/o3.js' ) ) );
 		$this->head_framework( 'o3_date', array( array( O3_URL.'/resource/js/o3_date.js', O3_RES_DIR.'/js/o3_date.js' ) ) );
 		$this->head_framework( 'o3_route', array( array( O3_URL.'/resource/js/o3_route.js', O3_RES_DIR.'/js/o3_route.js' ) ) );
 		$this->head_framework( 'o3_native', array( array( O3_URL.'/resource/js/o3_native.js', O3_RES_DIR.'/js/o3_native.js' ) ) );
@@ -111,15 +124,22 @@ class o3 {
 												  array( O3_URL.'/resource/js/o3_popup/o3_popup.js', O3_RES_DIR.'/js/o3_popup/o3_popup.js' ),
 												  array( O3_URL.'/resource/js/o3_popup/o3_popup.css', O3_RES_DIR.'/js/o3_popup/o3_popup.css', 'stylesheet' ) ) );
 
+		//o3_popup no css
+		$this->head_framework( 'o3_popup_no_css', array( array( 'jquery,o3_no_css,o3_touch' ),
+												  array( O3_URL.'/resource/js/o3_popup/o3_popup.js', O3_RES_DIR.'/js/o3_popup/o3_popup.js' ) ) );
+
 		//o3_popup
 		$this->head_framework( 'o3_popnote', array( array( 'jquery,o3' ),
 												    array( O3_URL.'/resource/js/o3_popnote/o3_popnote.js', O3_RES_DIR.'/js/o3_popnote/o3_popnote.js' ),
 												    array( O3_URL.'/resource/js/o3_popnote/o3_popnote.css', O3_RES_DIR.'/js/o3_popnote/o3_popnote.css', 'stylesheet' ) ) );
 
-		//o3_popup
+		//o3_scrolltop
 		$this->head_framework( 'o3_scrolltop', array( array( 'jquery,o3' ),
 												      array( O3_URL.'/resource/js/o3_scrolltop/o3_scrolltop.js', O3_RES_DIR.'/js/o3_scrolltop/o3_scrolltop.js' ),
 												      array( O3_URL.'/resource/js/o3_scrolltop/o3_scrolltop.css', O3_RES_DIR.'/js/o3_scrolltop/o3_scrolltop.css', 'stylesheet' ) ) );
+
+		//o3_scrolltop only js
+		$this->head_framework( 'o3_scrolltop_js', array( array( O3_URL.'/resource/js/o3_scrolltop/o3_scrolltop.js', O3_RES_DIR.'/js/o3_scrolltop/o3_scrolltop.js' ) ) );
 
 		//o3_popup
 		$this->head_framework( 'o3_tooltip', array( array( 'jquery,o3' ),
@@ -127,6 +147,11 @@ class o3 {
 												    array( O3_URL.'/resource/js/o3_tooltip/o3_tooltip.css', O3_RES_DIR.'/js/o3_tooltip/o3_tooltip.css', 'stylesheet' ) ) );
 
 
+		//clear cache
+		if ( O3_CACHE_CLEAN_USE_PERCENT > 0 && rand(1,100) <= O3_CACHE_CLEAN_USE_PERCENT ) {
+			$this->debug->_('Clearing cache');
+			$this->clear_cache();
+		}
 
   	}
   
@@ -171,12 +196,69 @@ class o3 {
 			@include_once(O3_MOD_DIR.'/'.$this->modules[$i]['name'].'/load.php');
 		}
 	}
+	
+	/** array List of resource to load in html body */
+	public $body_resources = array();
 
-	/** array List of resource to load in html head */ 
-	public $head_resources = array();	
+	/** array List of resource to load in html head */
+	public $head_resources = array();
 
 	/** array Frameworks list for head resources */ 
 	public $head_frameworks = array();
+
+	/*
+	* Add resource or framework to load
+	*
+	* @param string $path Path to the file 
+	*
+	* @return void
+	*/
+	public function head_js( $path ) {
+		if ( $path != '' ) {
+			//get caller script path, we need for relaive paths
+			$relative_path = o3_get_caller_path();
+			if ( $relative_path != '' && !realpath($path) )
+				$path = $relative_path.'/'.$path;
+			$path = realpath($path);
+		}
+		$this->head_res( '', $path, 'javascript' );
+	}
+
+	/*
+	* Add resource or framework to load
+	*
+	* @param string $path Path to the file 
+	*
+	* @return void
+	*/
+	public function head_css( $path ) {
+		if ( $path != '' ) {
+			//get caller script path, we need for relaive paths
+			$relative_path = o3_get_caller_path();
+			if ( $relative_path != '' && !realpath($path) )
+				$path = $relative_path.'/'.$path;
+			$path = realpath($path);
+		}
+		$this->head_res( '', $path, 'stylesheet' );
+	}
+
+	/*
+	* Add resource or framework to load
+	*
+	* @param string $path Path to the file 
+	*
+	* @return void
+	*/
+	public function head_less( $path ) {
+		if ( $path != '' ) {
+			//get caller script path, we need for relaive paths
+			$relative_path = o3_get_caller_path();
+			if ( $relative_path != '' && !realpath($path) )
+				$path = $relative_path.'/'.$path;
+			$path = realpath($path);
+		}
+		$this->head_res( '', $path, 'stylesheet/less' );
+	}
 
 	/*
 	* Add resource or framework to load
@@ -189,7 +271,7 @@ class o3 {
 	*
 	* @param string $url Optional. URL to the file
  	* @param string $path Optional. Path to the file 
-	* @param string $type Optional. Type of resource. Accepted values: javascript, stylesheet. Default: javascript
+	* @param string $type Optional. Type of resource. Accepted values: javascript, stylesheet, stylesheet/less. Default: javascript
 	*
 	* @return void
 	*/
@@ -255,6 +337,129 @@ class o3 {
 		$this->head_frameworks[$name] = $data;
 	}	
 
+	/*
+	* Add resource or framework to load
+	*
+	* @param string $path Path to the file 
+	*
+	* @return void
+	*/
+	public function body_js( $path ) {
+		if ( $path != '' ) {
+			//get caller script path, we need for relaive paths
+			$relative_path = o3_get_caller_path();
+			if ( $relative_path != '' && !realpath($path) )
+				$path = $relative_path.'/'.$path;
+			$path = realpath($path);
+		}
+		$this->body_res( '', $path, 'javascript' );
+	}
+
+	/*
+	* Add resource or framework to load
+	*
+	* @param string $path Path to the file 
+	*
+	* @return void
+	*/
+	public function body_css( $path ) {
+		if ( $path != '' ) {
+			//get caller script path, we need for relaive paths
+			$relative_path = o3_get_caller_path();
+			if ( $relative_path != '' && !realpath($path) )
+				$path = $relative_path.'/'.$path;
+			$path = realpath($path);
+		}
+		$this->body_res( '', $path, 'stylesheet' );
+	}
+
+	/*
+	* Add resource or framework to load
+	*
+	* @param string $path Path to the file 
+	*
+	* @return void
+	*/
+	public function body_less( $path ) {
+		if ( $path != '' ) {
+			//get caller script path, we need for relaive paths
+			$relative_path = o3_get_caller_path();
+			if ( $relative_path != '' && !realpath($path) )
+				$path = $relative_path.'/'.$path;
+			$path = realpath($path);
+		}
+		$this->body_res( '', $path, 'stylesheet/less' );
+	}
+
+	/*
+	* Add resource or framework to load
+	*
+	* Param count: 1
+	*
+	* @param string $names - One or more framework name with comma seperated
+	*
+	* Param count: 3
+	*
+	* @param string $url Optional. URL to the file
+ 	* @param string $path Optional. Path to the file 
+	* @param string $type Optional. Type of resource. Accepted values: javascript, stylesheet. Default: javascript
+	*
+	* @return void
+	*/
+	public function body_res() {
+		$args = func_get_args();
+		$url = isset($args[0]) ? $args[0] : '';
+		$path = isset($args[1]) ? $args[1] : '';
+		$type = isset($args[2]) ? $args[2] : 'javascript';
+		if ( func_num_args() == 1 ) {
+
+			//add frameworks
+			$url = explode(',', $url);
+			foreach ( $url as $value ) {
+				$value = trim($value);
+				if ( isset($this->head_frameworks[$value]) && count($this->head_frameworks[$value]) ) {
+					foreach ( $this->head_frameworks[$value] as $key => $value ) {
+						if ( count($value) == 1 ) {
+							//framework
+							$this->body_res( $value[0] );
+						} else {
+							if ( isset($value[2]) && ( $value[2] == 'stylesheet' || $value[2] == 'stylesheet/less' ) ) {
+								$this->head_res( $value[0], $value[1], $value[2] );
+							} else {
+								//resource
+								$this->body_res( $value[0], $value[1], isset($value[2]) ? $value[2] : 'javascript' );
+							}							
+						}
+						
+					}
+				}
+			}
+			
+		} else {
+
+			if ( $path != '' ) {
+				//get caller script path, we need for relaive paths
+				$relative_path = o3_get_caller_path();
+				if ( $relative_path != '' && !realpath($path) )
+					$path = $relative_path.'/'.$path;
+				$path = realpath($path);
+			}
+
+			if ( $path == '' ) {
+				if ( $url != '' )
+					if ( !isset($this->body_resources[$url]) )
+						$this->body_resources[$url] = array( 'url' => $url,
+													   	 	 'path' => $path,
+												     		 'type' => $type );
+			} else {
+				if ( !isset($this->body_resources[$path]) )
+					$this->body_resources[$path] = array( 'url' => $url,
+												   	 	  'path' => $path,
+											     		  'type' => $type );
+			};
+		}
+	}
+
 	/** array List of inline content to insert in html head */ 
 	public $head_inlines = array(); 
 	
@@ -262,7 +467,7 @@ class o3 {
 	* Add inline to html head
 	*
 	* @param string $content Inline code
-	* @param string $type Optional. Type of code. Accepted values: javascript, stylesheet. Default: javascript
+	* @param string $type Optional. Type of code. Accepted values: javascript, stylesheet, stylesheet/less. Default: javascript
 	*
 	* @return void
 	*/
@@ -279,8 +484,10 @@ class o3 {
 	*/
 	public function html_head_inject( $buffer ) {		
 		$js = array();
-		$css = array();		
-		$is_mini = isset($this->mini);
+		$css = array();
+		$less = array();		
+		$is_mini_css = isset($this->mini) && $this->mini->minimize && $this->mini->minimize_css;
+		$is_mini_js = isset($this->mini) && $this->mini->minimize && $this->mini->minimize_js;
 		$inline_js = '';
 		$inline_css = '';
 		$code_js = '';
@@ -293,6 +500,8 @@ class o3 {
 					case 'javascript':
 						$inline_js .= '<script type="text/javascript">'.$value['content'].'</script>';
 						break;
+					case 'stylesheet/less':
+						$inline_css .= '<style type="stylesheet/less">'.$value['content'].'</style>';
 					case 'stylesheet':
 						$inline_css .= '<style>'.$value['content'].'</style>';
 						break;
@@ -303,6 +512,110 @@ class o3 {
 		//resources
 		if ( count($this->head_resources) > 0 ) {
 			foreach ($this->head_resources as $value) {
+				if ( !isset($value['path']) || $value['path'] == '' ) {
+					switch ($value['type']) {
+						case 'javascript':
+							if ( count($js) > 0 )
+								$code_js .= $this->mini->js_script( $js );
+							$js = array();	
+							$code_js .= '<script type="text/javascript" src="'.$value['url'].'"></script>';
+							break;
+						case 'stylesheet/less':
+							if ( count($css) > 0 )
+								$code_css .= $this->mini->less_link( $css );
+							$css = array();
+							$code_css .= '<link rel="stylesheet/less" type="text/css" href="'.$value['url'].'" />';
+							break;
+						case 'stylesheet':
+							if ( count($css) > 0 )
+								$code_css .= $this->mini->css_link( $css );
+							$css = array();
+							$code_css .= '<link rel="stylesheet" type="text/css" href="'.$value['url'].'" />';
+							break;
+					}
+				} else {
+					switch ($value['type']) {
+						case 'javascript':
+							$js[] = $is_mini_js ? $value['path'] : $value['url'];	
+							break;
+						case 'stylesheet':
+							$css[] = $is_mini_css ? $value['path'] : $value['url'];	
+							break;
+						case 'stylesheet/less':
+							$css[] = $is_mini_css ? $value['path'] : $value['url'];	
+							break;
+					}
+				}				
+			}
+
+			if ( $is_mini_css ) {
+				if ( count($css) > 0 ) {
+					$url = $this->mini->css_cache_url( $css );
+					$code_css .= '<link rel="stylesheet" type="text/css" href="'.$url.'" />';
+					isset($this->manifest) ? $this->manifest->cache($url) : ''; //add url to cache manifest
+				}
+			} else {
+				if ( count($css) > 0 )
+					foreach ($css as $value) {
+						isset($this->manifest) ? $this->manifest->cache($value) : false; //add url to cache manifest
+						
+						$rel = strtolower(o3_extension($value)) == 'less' ? "stylesheet/less" : "stylesheet";
+						$code_css .= '<link rel="'.$rel.'" type="text/css" href="'.$value.'" />';
+					}
+			}
+
+			if ( $is_mini_js ) {
+				if ( count($js) > 0 ) {
+					$url = $this->mini->js_cache_url( $js );
+					$code_js .= '<script type="text/javascript" src="'.$url.'"></script>';
+					isset($this->manifest) ? $this->manifest->cache($url) : ''; //add url to cache manifest
+				}
+			} else {
+				if ( count($js) > 0 )
+					foreach ($js as $value) {
+						isset($this->manifest) ? $this->manifest->cache($value) : false; //add url to cache manifest
+						$code_js .= '<script type="text/javascript" src="'.$value.'"></script>';
+					}
+			}
+
+		}
+		
+		//put together in correct order
+		$code = $inline_js.$code_css.$inline_css.$code_js;
+		
+		//insert code	
+		if ( $code != '' ) {
+			//split html at head tag
+			$matches = preg_split('/(<head.*?>)/i', $buffer, 0, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE); 	
+			if ( count($matches) > 1 ) { 
+				//assemble the html output back with the script code in it
+				$buffer = $matches[0] . $matches[1] . ( !preg_match( '/(<header)/i', $matches[1]) ? $code : '' );
+				for ( $i = 2; $i < count($matches); $i++ )
+					$buffer .= $matches[$i];							
+			}
+		}	
+
+		return $buffer;
+	}
+
+	/*
+	* Inject HTML code to body tag 
+	* $buffer - Buffer string
+	*
+	* @return string
+	*/
+	public function html_body_inject( $buffer ) {		
+		$js = array();
+		$css = array();
+		$is_mini = isset($this->mini);
+		$inline_js = '';
+		$inline_css = '';
+		$code_js = '';
+		$code_css = '';
+		
+		//resources
+		if ( count($this->body_resources) > 0 ) {
+			foreach ($this->body_resources as $value) {
 				if ( !isset($value['path']) || $value['path'] == '' ) {
 					switch ($value['type']) {
 						case 'javascript':
@@ -359,18 +672,17 @@ class o3 {
 		//put together in correct order
 		$code = $inline_js.$code_css.$inline_css.$code_js;
 		
-		//insert code	
+		//insert code
 		if ( $code != '' ) {
-			//split html at head tag
-			$matches = preg_split('/(<head.*?>)/i', $buffer, 0, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE); 	
+			//split html at body tag
+			$matches = preg_split('/(<\/body.*?>)/i', $buffer, 0, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE); 	
 			if ( count($matches) > 1 ) { 
 				//assemble the html output back with the script code in it
-				$buffer = $matches[0] . $matches[1] . ( !preg_match( '/(<header)/i', $matches[1]) ? $code : '' );
+				$buffer = $matches[0] . $code . $matches[1];
 				for ( $i = 2; $i < count($matches); $i++ )
-					$buffer .= $matches[$i];							
+					$buffer .= $matches[$i];
 			}
 		}
-		
 
 		return $buffer;
 	}
@@ -382,6 +694,22 @@ class o3 {
 	 */
 	public function __destruct() {
 		;
+	}
+
+
+	/*
+	* Clear cache folder
+	*
+	* @param $max_lifetime - Lifetime of the files  
+	*
+	* @return void
+	*/
+	public function clear_cache( $max_lifetime = O3_CACHE_MAX_LIFETIME ) {
+		$files = array_merge(glob(preg_replace('/(\*|\?|\[)/', '[$1]', O3_CACHE_DIR.'/').'*'),glob(preg_replace('/(\*|\?|\[)/', '[$1]', O3_CACHE_PRIVATE_DIR.'/').'*'));
+		if ( count($files) > 0 )
+			foreach ( $files as $file )
+				if ( ( $max_lifetime == 0 ) || ( $max_lifetime > 0 && filemtime($file) + $max_lifetime <= time() ) )
+					o3_unlink( $file );
 	}
 	
 }
@@ -509,30 +837,40 @@ class o3_ajax_result {
 	}
 
 	/*
-	* Set redirect
-	* @return self
+	* Set redirect for return data
+	*
+	* @param string $url URL to redirect 
+	* @return void
 	*/
-	public function redirect( $redirect = '' ) {
-		$this->redirect_ = $redirect;
+	public function redirect( $url = '' ) {
+		$this->redirect_ = $url;
 	}
-	
+
 	/*
-	* Print out data as json
-	* @return self
+	* Return result data as array
+	* @return array
 	*/
-	public function flush() {
-		//on error send page not found
-		if( $this->fail ) 
-			o3_header_code(404);
-		$result = array(
+	public function result() {
+		return array(
 			'success' => $this->success_,
 			'success_msg' => $this->success_msg_,
 			'error_msg' => $this->error_msg_,
 			'redirect' => $this->redirect_,
 			'data' => $this->data_
 		);
-		die(json_encode($result,JSON_HEX_QUOT | JSON_HEX_TAG));
 	}
+	
+	/*
+	* Print out result data as json and stops the script
+	* @return self
+	*/
+	public function flush() {
+		//on error send page not found
+		if( $this->fail ) 
+			o3_header_code(404);
+		die( json_encode( $this->result(), JSON_HEX_QUOT | JSON_HEX_TAG ) );
+	}
+
 
 }
 

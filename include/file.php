@@ -298,6 +298,14 @@ function o3_temp_cache_file( $filename = '', $lifetime = 1800 ) {
 	return O3_CACHE_DIR.'/'.(time()+$lifetime).'-'.$file.( $ext != '' ? '.'.$ext : '' );
 }
 
+/*
+* Create url from cache path
+*/
+function o3_cache_url( $filepath ) {
+	$filename = basename($filepath);
+	return O3_CACHE_URL.'/'.$filename;
+}
+
 /**
 * Get function caller script path
 * @return string/boolean False if unable to find path else path name
@@ -363,7 +371,6 @@ function o3_upload_max_filesize() {
 function o3_upload_max_size() {
 	return min( o3_post_max_size(), o3_upload_max_filesize() );
 }
-
 
 /*
 * Get content of URL

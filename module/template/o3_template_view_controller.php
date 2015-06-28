@@ -111,7 +111,8 @@ class o3_template_view_controller {
 
   		ob_start();
 		if ( is_file($this->view_file) && is_readable($this->view_file) && include($this->view_file) ) {
-			$this->parent->debug->_( 'View "'. o3_html($view).'" included.' );			
+			if ( isset($this->root) )
+				$this->root->debug->_( 'View "'. o3_html($view).'" included.' );			
 		} else {
 			trigger_error( 'View error! Unable to load "'. o3_html($view).'".', E_USER_WARNING );
 			return false;
@@ -176,7 +177,8 @@ class o3_template_view_controller {
 					trigger_error( 'View controller error! Unable to load "'. o3_html($controller_file).'".', E_USER_WARNING );
 				} else {
 					$controller = new $name();
-					$this->parent->debug->_( 'View controller "'. o3_html($controller_file).'" loaded.' );
+					if ( isset($this->root) )
+						$this->root->debug->_( 'View controller "'. o3_html($controller_file).'" loaded.' );
 				}
 			}
 
@@ -186,13 +188,15 @@ class o3_template_view_controller {
 
 			//set view file, parent & initialize the controller
 			$controller->set_view_file( $is_view_file ? $view_file : '' );
-			$controller->set_parent( $this->parent );
+			$controller->set_parent( $this );			
+			$controller->set_root( $this->root );
 			call_user_func_array( array( $controller, 'init_' ), $args );
 
 			//add to views list
 			$this->views[] = &$controller;			
 
-			$this->parent->debug->_( 'View "'. o3_html($view_file).'" loaded.' );
+			if ( isset($this->root) )
+				$this->root->debug->_( 'View "'. o3_html($view_file).'" loaded.' );
 			return $controller;
 
 		}
@@ -209,6 +213,19 @@ class o3_template_view_controller {
 	*/	
 	public function set_parent( $parent ) {
 		return $this->parent = &$parent;
+	}
+
+	/** mixed Root object */
+	public $root = null;
+
+	/**
+	* Function sets the root object
+	*
+	* @param object $parent Root object	
+	* @return object
+	*/	
+	public function set_root( $root ) {		
+		return $this->root = &$root;
 	}
 
 }

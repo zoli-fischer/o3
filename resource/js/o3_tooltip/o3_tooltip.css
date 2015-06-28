@@ -10,14 +10,11 @@
 	-webkit-transition: opacity 0.3s ease-in, visibility 0.3s ease-in;
 	-o-transition: opacity 0.3s ease-in, visibility 0.3s ease-in;
 	transition: opacity 0.3s ease-in, visibility 0.3s ease-in;
-
 	z-index: 20000;
-
 	font-size: 12px;
 	color: #FFFFFF;
 	background: #333;
 	font-family: sans-serif;
-	
 	padding: 4px;
 	padding-left: 7px;
 	padding-right: 7px;

@@ -38,8 +38,8 @@ if ( isset($o3_module_data['collections']) && $o3_module_data['collections'] != 
 	$this->lang->load( $o3_module_data['collections'], $o3_module_data['languages'] );
 
 //resource dependencies
-$this->head_res( O3_URL.'/resource/js/lib/jquery/jquery-latest.min.js', O3_RES_DIR.'/js/lib/jquery/jquery-latest.min.js' );
-$this->head_res( O3_URL.'/resource/js/o3.js', O3_RES_DIR.'/js/o3.js' );
+//$this->head_res( O3_URL.'/resource/js/lib/jquery/jquery-latest.min.js', O3_RES_DIR.'/js/lib/jquery/jquery-latest.min.js' );
+//$this->head_res( O3_URL.'/resource/js/o3.js', O3_RES_DIR.'/js/o3.js' );
 
 //inject javascript code
 $this->debug->add_ob_start_callback( array( $this->lang, 'inject_html_script' ) );

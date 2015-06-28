@@ -422,7 +422,7 @@ class o3_form_email extends o3_form_field_base_class {
 				   		<div class="o3-form-field-spacer-top"></div>
 						<label class="o3-form-field-label" class="o3-form-field-label" for="'.$this->field_attr('id').'">'.$this->label.'</label>';
 				
-		$buffer .= '<input type="text" '.$this->get_field_attr().' />';
+		$buffer .= '<input type="email" novalidate="novalidate" oninvalid="return false" '.$this->get_field_attr().' />';
 				
 		$buffer .= '<div class="o3-form-field-spacer"></div>
 					<div '.$this->get_error_attr().'>'.nl2br(o3_html( isset($this->error_attr_['text']) ? $this->error_attr_['text'] : '' )).'</div>
@@ -821,7 +821,7 @@ class o3_form_text extends o3_form_field_base_class {
 		if ( $this->mandatory() ) {
 
 			//update the error text
-			$this->error( isset($o3) && isset($o3->lang) ? $o3->lang->_(O3_FORM_ERR_MANDATORY) : O3_FORM_ERR_MANDATORY );				
+			$this->error( trim($this->error()."\n".( isset($o3) && isset($o3->lang) ? $o3->lang->_(O3_FORM_ERR_MANDATORY) : O3_FORM_ERR_MANDATORY ) ) );				
 
 			//javascript reference
 			$this->field_attr('o3-form-mandatory','true');

@@ -17,7 +17,19 @@ function check_o3_route(callb) {
 		if ( callb != null )                                                                                                                                                                                     
 			callb(o3_route_hash);                                                                                                                                                                                  
 	};                                                                                                                                                                                                          
-};                                                                                                                                                                                                            
+};
+
+/** set hash */
+function o3_route_set_hash( hash, allow_callback ) {
+	hash = typeof hash == 'undefined' ? '' : hash;
+	
+	//do not trigger update event
+	allow_callback = typeof allow_callback == 'undefined' ? true : allow_callback;
+	if ( !allow_callback ) 
+		o3_route_hash = hash;
+	
+	window.location.hash = hash;
+}
                                                                                                                                                                                                              
 /** set route */                                                                                                                                                                                             
 function o3_route_set( hash, allow_callback ) {                                                                                                                                                                              

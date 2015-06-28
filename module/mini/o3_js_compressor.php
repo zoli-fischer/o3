@@ -25,11 +25,10 @@ if ( !class_exists('JavaScriptPacker', false ) )
  */
 class o3_js_compressor extends \JavaScriptPacker {
 	
-	public static function process( $_script, $_encoding = 62, $_fastDecode = true, $_specialChars = false )
-  {
-      $obj = new o3_js_compressor( $_script, $_encoding, $_fastDecode, $_specialChars );
-      return $obj->pack();
-  }
+	public static function process( $_script, $_encoding = 62, $_fastDecode = true, $_specialChars = false ) {
+		$obj = new o3_js_compressor( $_script, $_encoding, $_fastDecode, $_specialChars );
+		return $obj->pack();		
+  	}
   
 }
 

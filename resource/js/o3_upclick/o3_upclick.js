@@ -21,6 +21,8 @@ o3_ajax_upload = function( opts, container ) {
 		accept: typeof self.$container.attr('accept') != 'undefined' ? self.$container.attr('accept') : '',
 		multiple: typeof self.$container.attr('multiple') != 'undefined' && self.$container.attr('multiple') !== false ? true : false,
 		action: typeof self.$container.attr('action') != 'undefined' ? self.$container.attr('action') : '',
+		ignorefiletype: false, //true - don't check file type before upload
+		ignorefilesize: false, //true - don't check file size before upload
 		maxfilesize: 0,
 		sendonchange: false,
 		onsend: null,
@@ -169,17 +171,21 @@ o3_ajax_upload = function( opts, container ) {
 					var file = self.files[i];
 
 					//Check the file type
-					if ( self.opts.accept != '' && file.type != '' ) {
-						if ( !file.type.match(self.opts.accept) ) {
-							self.onfail( self.failCodes.filetype );
-							return;
+					if ( self.opts.ignorefiletype === false ) {
+						if ( self.opts.accept != '' && file.type != '' ) {
+							if ( self.opts.accept.match(file.type) === null ) {
+								self.onfail( self.failCodes.filetype );
+								return;
+							};
 						};
 					};
 
 					//Check file size
-					if ( file.size > self.opts.maxfilesize && self.opts.maxfilesize > 0 ) {
-						self.onfail( self.failCodes.filesize );
-						return;
+					if ( self.opts.ignorefilesize === false ) {
+						if ( file.size > self.opts.maxfilesize && self.opts.maxfilesize > 0 ) {
+							self.onfail( self.failCodes.filesize );
+							return;
+						};
 					};
 
 					// Add the file to the request

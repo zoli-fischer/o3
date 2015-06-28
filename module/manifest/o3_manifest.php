@@ -121,7 +121,7 @@ class o3_manifest {
 			$buffer .= "\nCACHE:\n";
 
 			foreach ( $this->manifest['cache'] as $key => $value) {
-				$buffer .= $value."\n";				
+				$buffer .= str_replace( ' ', '%20', $value )."\n";				
 			}
 		}
 

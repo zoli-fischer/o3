@@ -223,7 +223,6 @@ class o3_menu {
 			$this->items[] = $menu_item;
 		}
 
-
 		//check if the current uri is the same as menu item's href
 		if ( $this->check_uri( $href ) && $index != '' )
 			$this->select( $index, true );		
@@ -376,16 +375,15 @@ class o3_menu_item {
 	public function add( $index, $text, $href = '', $target = '_self', $classname ='', $visible = true, $attr = '' ) {	
 		$menu_item = new o3_menu_item( $text, $href, $target, $classname, $visible, $attr );		
 
-		//check if the current uri is the same as menu item's href
-		/*
-		todo:
-		if ( $this->check_uri( $href ) )
-			$menu_item->select( true );
-		*/
-			
 		if ( $index != '' ) {
 			$menu_item->index = $index;
-			return $this->items[$index] = $menu_item;
+			$this->items[$index] = $menu_item;
+
+			//check if the current uri is the same as menu item's href
+			if ( $this->check_uri( $href ) )
+				$this->select( $index, true );
+		
+			return $this->items[$index];
 		} else {
 			return $this->items[] = $menu_item;
 		}

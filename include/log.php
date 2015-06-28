@@ -123,16 +123,16 @@ class o3_log {
 	function append_to( $file = '', $text = '' ) {
 		if ( $this->allow_write && O3_LOG_ALLOWED ) {
 			$file = strlen(trim($file)) > 0 ? $file : $this->file;
-			$text = $text == '' ? $this->_s : $text;
+			$text = $text == '' ? $this->_s : $text;			
 			if ( strlen(trim($file)) > 0 ) {
 				$buffer = array();
 				foreach ( $text as $key => $value ) {
 					if ( $value->type & O3_LOG ) 
 						$buffer[] = date('Y-m-d H:i:s',$value->timestamp).': '.$value->prnt(false)."\r\n";			
 				}
-				return o3_write2top_file( $file, ( count($buffer) > 0 ? "\r\n" : "" ).implode("",$buffer), 'a' );
+				return strlen(trim(implode('', $buffer))) > 0 ? o3_write2top_file( $file, ( count($buffer) > 0 ? "\r\n" : "" ).implode("",$buffer), 'a' ) : true;
 			}
-			return false;
+			return false;			
 		}
 		return true;
 	}
@@ -151,16 +151,16 @@ class o3_log {
 	function append_bottom( $file = '', $text = '' ) {
 		if ( $this->allow_write && O3_LOG_ALLOWED ) {
 			$file = strlen(trim($file)) > 0 ? $file : $this->file;
-			$text = $text == '' ? $this->_s : $text;
+			$text = $text == '' ? $this->_s : $text;			
 			if ( strlen(trim($file)) > 0 ) {
 				$buffer = array();
 				foreach ( $text as $key => $value ) {
 					if ( $value->type & O3_LOG ) 
 						$buffer[] = date('Y-m-d H:i:s',$value->timestamp).': '.$value->prnt(false)."\r\n";			
 				}
-				return o3_write_file( $file, ( count($buffer) > 0 ? "\r\n" : "" ).implode("",$buffer), 'a' );
+				return strlen(trim(implode('', $buffer))) > 0 ? o3_write_file( $file, ( count($buffer) > 0 ? "\r\n" : "" ).implode("",$buffer), 'a' ) : true;
 			}
-			return false;
+			return false;			
 		}
 		return true;
 	}

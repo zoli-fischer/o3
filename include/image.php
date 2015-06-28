@@ -48,25 +48,25 @@ function o3_image_resize( $source, $destination = '', $width = 1024, $height = 7
 	$relative_path = o3_get_caller_path();
 
 	//check for source path
-	if ( !realpath($source) ) {		
+	if ( !realpath(dirname($source)) ) {		
 		if ( $relative_path != '' )		
 			$source = $relative_path.'/'.$source;
 	}
 
-	if ( file_exists($source) && is_readable($source) ) {
+	if ( file_exists($source) && is_readable($source) ) {		
 		if ( $destination == '' ) {
 			$destination = o3_cache_file( 'image-'.$width.'x'.$height.'-'.strtolower($flags.$dpi.$background.filesize($source).filemtime($source).'-'.basename($source)) );
 		} else {
 			//check for destination path
-			if ( !realpath($destination) ) {		
+			if ( !realpath(dirname($destination)) ) {		
 				if ( $relative_path != '' )		
 					$destination = $relative_path.'/'.$destination;
 			}
 		}		
 
-		if ( !file_exists($destination) ) {
+		if ( !file_exists($destination) ) {			
 			if ( is_imagic() ) {
-
+				
 				$size_flag = '';			
 				if ( $size_flag == '' )
 					$size_flag = ( $flags & O3_IMAGE_SHRINK_LARGER ? '>' : $size_flag );

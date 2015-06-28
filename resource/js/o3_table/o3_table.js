@@ -109,6 +109,7 @@ o3_table = function( opts ) {
 	    self.search_str = ko.observable(t.opts.search);
 	    self.header = ko.observableArray(t.opts.headers);
 	    self.scope = ko.observableArray();
+	    self.full_scope  = [];
 	    self.sort_index = ko.observable(t.defaut_sort_index);
 	    self.sort_ascending = ko.observable(t.defaut_sort_ascending);
 	    self.max_rows = ko.observable(t.max_rows);
@@ -137,13 +138,19 @@ o3_table = function( opts ) {
 				len = t.scope.length,
 				str = self.search_str().toLowerCase();
 
+			//clear full scope
+			while ( self.full_scope.length > 0 ) self.full_scope.pop();			
+			self.full_scope = [];
+				
 			for ( var i = 0; i < len; i++ ) {				  	
 				if ( str == '' ) { 
 					aux_data.push( t.scope[i].data );
+					self.full_scope.push( t.scope[i].data );
 				} else {
 					for ( var j = 0; j < t.opts.headers.length; j++ ) {						
 						if ( t.scope[i].search[j].indexOf(str) >= 0 ) {
 							aux_data.push( t.scope[i].data );
+							self.full_scope.push( t.scope[i].data );
 							break;
 						}
 					}
@@ -152,8 +159,8 @@ o3_table = function( opts ) {
 
 			//set full scope length
 			self.count( aux_data.length );						
-
-			while ( aux_data.length > self.max_rows() ) aux_data.pop();
+			
+			while ( aux_data.length > self.max_rows() ) aux_data.pop();			
 
 			//set scope
 			self.scope( aux_data );							 
@@ -265,6 +272,11 @@ o3_table = function( opts ) {
 		t.koapp.loading(false);
 		if ( t.ajax_obj && t.ajax_obj.abort )
 			t.ajax_obj.abort();
+	};
+
+	//get scope data
+	t.get_scope = function() {
+		return t.koapp.full_scope;
 	};
 
 	//set scope data

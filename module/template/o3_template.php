@@ -74,7 +74,7 @@ class o3_template {
 
 			//load template
 			call_user_func_array( array( $this, 'template' ) , $args );
-		}
+		}		
 
 		//get template contents
 		//if ( count($this->templates) ) {

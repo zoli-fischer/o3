@@ -97,6 +97,25 @@ function o3_session( $index, $value = '' ) {
 }
 
 /**
+* Alias for o3_session
+*/
+function o3_session_get( $index, $value = '' ) {
+	return o3_session( $index, $value );
+}
+
+/**
+* Set an item to $_SESSION by index. 
+*
+* @param string $index Index of the $_SESSION item
+* @param mixed $value (optional) Value to set set. Default value: ''
+*	
+* @return mixed
+*/	
+function o3_session_set( $index, $value = '' ) {
+	return $_SESSION[$index] = $value;	
+}
+
+/**
 	* Delete a session variable
 	*
 	* @param string $index The name of the session variable	

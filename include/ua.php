@@ -64,7 +64,7 @@ $o3_os_list = array (
 $o3_device_list = array ( 
 					O3_MOBILE => 'Mobile' );
 
-DEFINE('O3_HTTP_USER_AGENT',$_SERVER['HTTP_USER_AGENT']);
+define('O3_HTTP_USER_AGENT',isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '');
 
 //OS
 
@@ -410,6 +410,21 @@ function o3_presto( $ua =  O3_HTTP_USER_AGENT ) {
 	return false;
 }
 
+//ROBOTS
+
+/**
+* Check if current visitor is search bot
+*
+* @param string $ua (optional) User agent string. Default value: Global user agent string
+*
+* @return string|boolean False if the visitor is not a search bot
+*/
+function o3_robot( $ua = O3_HTTP_USER_AGENT ) {	
+	if ( preg_match('/Google|Yahoo/', $ua ) ) 
+		return true;
+	return false;
+}
+
 //DEVICE
 
 /**
@@ -582,9 +597,13 @@ function o3_ua_body_classes( $ua = O3_HTTP_USER_AGENT ) {
 	$key = 'android';
 	push( $buffer, $value, $key );
 	
-	$value = o3_is_ios( $ua );
+	$value = o3_ios( $ua );
 	$key = 'ios';
 	push( $buffer, $value, $key );
+	if ( $value !== false ) {
+		$key = 'ios'.$value;
+		push( $buffer, $value, $key );
+	}
 	
 	$value = o3_is_windows( $ua );
 	$key = 'windows';

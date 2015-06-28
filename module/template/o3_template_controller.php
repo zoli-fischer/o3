@@ -135,7 +135,8 @@ class o3_template_controller {
 
 			//set view file, parent & initialize the controller
 			$controller->set_view_file( $is_view_file ? $view_file : '' );
-			$controller->set_parent( $this->parent );
+			$controller->set_parent( $this );
+			$controller->set_root( $this->parent );
 			call_user_func_array( array( $controller, 'init_' ), $args );
 
 			//add to views list

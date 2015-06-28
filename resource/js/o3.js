@@ -95,11 +95,12 @@ function o3_write_script(url){
 }
 
 //dynamic load javascript
-function o3_load_script( url, async ) {
+function o3_load_script( url, async, onload ) {
 	async = typeof async == 'undefined' ? true : async;
 	var s = document.createElement('script');
       s.type = 'text/javascript';
       s.src = url;
+      s.onload = onload;
       var x = document.getElementsByTagName('script')[0];
       x.parentNode.insertBefore(s, x);
 }
@@ -109,16 +110,41 @@ function o3_script( url, async ) {
   o3_load_script( url, async );
 };
 
+//check for condition and runc function when is true
+function o3_trigger( func, cond, delay ) {  
+  var t = this;
+
+  delay = typeof delay == 'undefined' ? 100 : delay;
+
+  t.interval = setInterval( function() {    
+    if ( cond() ) {
+      clearInterval(t.interval);
+      func();
+    };
+  }, delay );
+};
+
 //local storage & cookies
 
 //set value and expiration of cookie
-function o3_set_cookie(name, value, seconds) {  
+function o3_set_cookie( name, value, seconds ) {  
   var expires = "";
   if ( typeof seconds != 'undefined' ) {
       var date = new Date();
-      date.setTime(date.getTime() + (days * 1000));
+      date.setTime(date.getTime() + (seconds * 1000));
       expires = "; expires=" + date.toGMTString();
-  }
+  };
+  document.cookie = name + "=" + value + expires + "; path=/";
+};
+
+//unset cookie by name
+function o3_unset_cookie( name ) {  
+  var expires = "",
+      value = "",
+      seconds = -3600;  
+  var date = new Date();
+  date.setTime(date.getTime() + (seconds * 1000));
+  expires = "; expires=" + date.toGMTString();  
   document.cookie = name + "=" + value + expires + "; path=/";
 };
 
@@ -161,6 +187,38 @@ function o3_html5_store( index, value ) {
 };
 
 
+//array functions
+
+/*
+* Update elements in array
+*/
+function o3_array_update( arr, func, data ) {
+  if ( typeof func == 'function' ) 
+    for ( prop in arr ) {    
+      if ( func(arr[prop]) ) 
+        arr[prop] = data;
+    };
+};
+/*
+if (!('o3_array_update' in Array.prototype))
+  Array.prototype.o3_array_update = function( func, data ) {
+    o3_array_update( this, func, data );
+  };
+*/
+
+/*
+* Remove elements from array
+*/
+function o3_array_remove( arr, func ) {
+  if ( typeof func == 'function' ) 
+    for ( prop in arr ) {    
+      if ( func(arr[prop]) ) {
+        var index = arr.indexOf( arr[prop] );
+        if ( index > -1 ) 
+          arr.splice( index, 1 );      
+      };
+    };
+};
 
 //file/url functions
 

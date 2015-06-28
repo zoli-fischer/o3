@@ -8,22 +8,44 @@ body {
 .o3_popup_overlay {
 	position: fixed; 
 	left: 0px;
-	top: 0px;
+	bottom: 0px;
 	width: 100%;
-	height: 100%;	
-	display: none;
+	height: 100%;
+	display: none;	
+}
+
+.o3_popup_container_outer {
+	position: fixed; 
+	left: 0px;
+	bottom: 0px;
+	width: 100%;
+	height: 100%;
+	display: none;	
+}
+
+.o3_popup_container,
+.o3_popup_container *, 
+.o3_popup_container *:before, 
+.o3_popup_container *:after {
+	-moz-box-sizing: border-box; 
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 .o3_popup_container {	
-	position: fixed; 
+	position: absolute; 
+	left: 0px;
+	top: 0px;
+	/*
+	removed for fixing ios pos: fixed problem on keyboard pop
 	left: 50%;
 	top: 50%;
-	max-width: 100%;
-	max-height: 100%;
 	margin: -150px 0px 0px -200px;
+	*/
+	max-width: 100%;
+	max-height: 100%;	
 	background: #FFFFFF;
 	border: 1px solid #999;
-	overflow: auto;
 	opacity: 0.0;
 	filter: alpha(opacity: 0);
 	display: none;
@@ -183,6 +205,7 @@ body {
 /* animation in */
 .o3_popup_container_fadein {
 	opacity: 0;
+	filter: alpha(opacity: 0);
 	-moz-transition: opacity 0.3s ease-in;
 	-webkit-transition: opacity 0.3s ease-in;
 	-o-transition: opacity 0.3s ease-in;
@@ -191,53 +214,60 @@ body {
 
 .o3_popup_container_do_fadein {
 	opacity: 1;
+	filter: alpha(opacity: 100);
 }
 
 .o3_popup_container_rotatexin {
 	opacity: 1;
+	filter: alpha(opacity: 100);
 	-webkit-transform: rotateX(90deg); /* Chrome, Safari, Opera */
     transform: rotateX(90deg);
-	-moz-transition: transform 0.3s ease-in;
-	-webkit-transition: transform 0.3s ease-in;
-	-o-transition: transform 0.3s ease-in;
+	-moz-transition: -moz-transform 0.3s ease-in;
+	-webkit-transition: -webkit-transform 0.3s ease-in;
+	-o-transition: -o-transform 0.3s ease-in;
 	transition: transform 0.3s ease-in;	
 }
 
 .o3_popup_container_do_rotatexin {
 	opacity: 1;
+	filter: alpha(opacity: 100);
 	-webkit-transform: rotateX(0deg); /* Chrome, Safari, Opera */
     transform: rotateX(0deg);
 }
 
 .o3_popup_container_rotateyin {
 	opacity: 1;
+	filter: alpha(opacity: 100);
 	-webkit-transform: rotateY(90deg); /* Chrome, Safari, Opera */
     transform: rotateY(90deg);
-	-moz-transition: transform 0.3s ease-in;
-	-webkit-transition: transform 0.3s ease-in;
-	-o-transition: transform 0.3s ease-in;
+	-moz-transition: -moz-transform 0.3s ease-in;
+	-webkit-transition: -webkit-transform 0.3s ease-in;
+	-o-transition: -o-transform 0.3s ease-in;
 	transition: transform 0.3s ease-in;	
 }
 
 .o3_popup_container_do_rotateyin {
 	opacity: 1;
+	filter: alpha(opacity: 100);
 	-webkit-transform: rotateY(0deg); /* Chrome, Safari, Opera */
     transform: rotateY(0deg);
 }
 
 .o3_popup_container_scalein {
 	opacity: 0;
+	filter: alpha(opacity: 0);
 	-ms-transform: scale(0.3,0.3); /* IE 9 */
     -webkit-transform: scale(0.3,0.3); /* Chrome, Safari, Opera */
     transform: scale(0.3,0.3);
-	-moz-transition: transform 0.3s ease-out, opacity 0.3s ease-in;
-	-webkit-transition: transform 0.3s ease-out, opacity 0.3s ease-in;
-	-o-transition: transform 0.3s ease-out, opacity 0.3s ease-in;
+	-moz-transition: -moz-transform 0.3s ease-out, opacity 0.3s ease-in;
+	-webkit-transition: -webkit-transform 0.3s ease-out, opacity 0.3s ease-in;
+	-o-transition: -o-transform 0.3s ease-out, opacity 0.3s ease-in;
 	transition: transform 0.3s ease-out, opacity 0.3s ease-in;
 }
 
 .o3_popup_container_do_scalein {
 	opacity: 1;
+	filter: alpha(opacity: 100);
 	-ms-transform: scale(1,1); /* IE 9 */
     -webkit-transform: scale(1,1); /* Chrome, Safari, Opera */
     transform: scale(1,1);
@@ -245,17 +275,19 @@ body {
 
 .o3_popup_container_scaledownin {
 	opacity: 0;
+	filter: alpha(opacity: 0);
 	-ms-transform: scale(6,6); /* IE 9 */
     -webkit-transform: scale(6,6); /* Chrome, Safari, Opera */
     transform: scale(6,6);
-	-moz-transition: transform 0.3s ease-out, opacity 0.3s ease-in;
-	-webkit-transition: transform 0.3s ease-out, opacity 0.3s ease-in
-	-o-transition: transform 0.3s ease-out, opacity 0.3s ease-in
+	-moz-transition: -moz-transform 0.3s ease-out, opacity 0.3s ease-in;
+	-webkit-transition: -webkit-transform 0.3s ease-out, opacity 0.3s ease-in
+	-o-transition: -o-transform 0.3s ease-out, opacity 0.3s ease-in
 	transition: transform 0.3s ease-out, opacity 0.3s ease-in	
 }
 
 .o3_popup_container_do_scaledownin {
 	opacity: 1;
+	filter: alpha(opacity: 100);
 	-ms-transform: scale(1,1); /* IE 9 */
     -webkit-transform: scale(1,1); /* Chrome, Safari, Opera */
     transform: scale(1,1);
@@ -271,12 +303,13 @@ body {
 
 .o3_popup_container_do_fadeout {
 	opacity: 0;
+	filter: alpha(opacity: 0);
 }
 
 .o3_popup_container_rotatexout {
-	-moz-transition: transform 0.2s ease-out;
-	-webkit-transition: transform 0.2s ease-out;
-	-o-transition: transform 0.2s ease-out;
+	-moz-transition: -moz-transform 0.2s ease-out;
+	-webkit-transition: -webkit-transform 0.2s ease-out;
+	-o-transition: -o-transform 0.2s ease-out;
 	transition: transform 0.2s ease-out;	
 }
 
@@ -286,9 +319,9 @@ body {
 }
 
 .o3_popup_container_rotateyout {
-	-moz-transition: transform 0.2s ease-out;
-	-webkit-transition: transform 0.2s ease-out;
-	-o-transition: transform 0.2s ease-out;
+	-moz-transition: -moz-transform 0.2s ease-out;
+	-webkit-transition: -webkit-transform 0.2s ease-out;
+	-o-transition: -o-transform 0.2s ease-out;
 	transition: transform 0.2s ease-out;	
 }
 
@@ -298,28 +331,30 @@ body {
 }
 
 .o3_popup_container_scaleout {
-	-moz-transition: transform 0.2s ease-in, opacity 0.2s ease-out;
-	-webkit-transition: transform 0.2s ease-in, opacity 0.2s ease-out;
-	-o-transition: transform 0.2s ease-in, opacity 0.2s ease-out;
+	-moz-transition: -moz-transform 0.2s ease-in, opacity 0.2s ease-out;
+	-webkit-transition: -webkit-transform 0.2s ease-in, opacity 0.2s ease-out;
+	-o-transition: -o-transform 0.2s ease-in, opacity 0.2s ease-out;
 	transition: transform 0.2s ease-in, opacity 0.2s ease-out;
 }
 
 .o3_popup_container_do_scaleout {
 	opacity: 0;
+	filter: alpha(opacity: 0);
 	-ms-transform: scale(0.3,0.3); /* IE 9 */
     -webkit-transform: scale(0.3,0.3); /* Chrome, Safari, Opera */
     transform: scale(0.3,0.3);
 }
 
 .o3_popup_container_scaledownout {
-	-moz-transition: transform 0.2s ease-in, opacity 0.2s ease-out;
-	-webkit-transition: transform 0.2s ease-in, opacity 0.2s ease-out;
-	-o-transition: transform 0.2s ease-in, opacity 0.2s ease-out;
+	-moz-transition: -moz-transform 0.2s ease-in, opacity 0.2s ease-out;
+	-webkit-transition: -webkit-transform 0.2s ease-in, opacity 0.2s ease-out;
+	-o-transition: -o-transform 0.2s ease-in, opacity 0.2s ease-out;
 	transition: transform 0.2s ease-in, opacity 0.2s ease-out;
 }
 
 .o3_popup_container_do_scaledownout {
 	opacity: 0;
+	filter: alpha(opacity: 0);
 	-ms-transform: scale(6,6); /* IE 9 */
     -webkit-transform: scale(6,6); /* Chrome, Safari, Opera */
     transform: scale(6,6);

@@ -195,6 +195,7 @@ ko.bindingHandlers.o3_stopBinding = {
 //KO 2.1, now allows you to add containerless support for custom bindings
 ko.virtualElements.allowedBindings.o3_stopBinding = true;
 
+
 //check for css class change event on element
 // data-bind="o3_cssChange: { 'tab-list-selected': function( hasCss ) { show(hasCss) } }" - if tab-list-selected class is added/removed to dom element the event will be trigger. Event parameter true if the element has the class, false if not
 // data-bind="o3_cssChange: function() { show() }" - if class attribute is changed on dom element the event will be trigger
@@ -211,7 +212,7 @@ ko.bindingHandlers.o3_cssChange = {
                 props[prop] = $element.hasClass(prop);            
 
         //check for class change
-        function checkCssChange() {
+        function checkCssChange() {            
             var element_css = $element.attr('class');
             element_css = jQuery.trim(typeof element_css == 'undefined' ? '' : element_css);            
             if ( element_css != css ) {

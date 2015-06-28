@@ -11,10 +11,9 @@
 o3_scrolltop = function( opts ) {
 	
 	var t = this;
-	$ = jQuery;
-	
+
 	//options
-	t.opts = $.extend({ topOffset: 100,
+	t.opts = jQuery.extend({ topOffset: 100,
 											bottomOffset: 0,										
 											className: 'o3_scrolltop'
 											//,topBoundary: 
@@ -24,10 +23,10 @@ o3_scrolltop = function( opts ) {
 	t.$btn = null;
 
 	t.check_position = function() {
-		var top = $(window).scrollTop();		
+		var top = jQuery(window).scrollTop();		
 	
 		if ( t.opts.topOffset == 0 || ( top > t.opts.topOffset &&
-				 ( t.opts.bottomOffset == 0 || ( $(document).height() - ( $(window).height() + top ) ) > t.opts.bottomOffset ) ) ) {
+				 ( t.opts.bottomOffset == 0 || ( jQuery(document).height() - ( jQuery(window).height() + top ) ) > t.opts.bottomOffset ) ) ) {
 			if ( !t.$btn.hasClass('o3_scrolltop_show') )
       	t.$btn.addClass('o3_scrolltop_show');
   	} else {
@@ -40,10 +39,10 @@ o3_scrolltop = function( opts ) {
 	t.init = function() {
 	   		
 	  //create button		
-	  t.$btn = $('<div class="'+t.opts.className+'"><span>^</span></div>').appendTo('body').click( function() { $("html, body").animate({ scrollTop: 0 }, "slow"); } );
+	  t.$btn = jQuery('<div class="'+t.opts.className+'"><span>^</span></div>').appendTo('body').click( function() { jQuery("html, body").animate({ scrollTop: 0 }, "slow"); } );
 	   		
-	  $(window).scroll(function(){t.check_position()}); //check on scroll event 		
-	  $(window).resize(function(){t.check_position()}); //check on resize
+	  jQuery(window).scroll(function(){t.check_position()}); //check on scroll event 		
+	  jQuery(window).resize(function(){t.check_position()}); //check on resize
 		
 	  //check on touch
 	  if ( typeof window.addEventListener == 'function' )

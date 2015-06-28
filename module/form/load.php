@@ -17,11 +17,10 @@ if ( !defined('O3') || !isset($this) )
 require_once(str_replace(DIRECTORY_SEPARATOR, '/', realpath(dirname(__FILE__))).'/config.php');
 require_once('o3_form.php'); 
 
-//resource dependencies
-$this->head_res( 'jquery,knockout,o3,o3_string,o3_valid,sprintf' );
-
 //inject javascript/css if allowed
 if ( O3_FORM_INJECT_RESOURCES ) {	
+	//resource dependencies
+	$this->head_res( 'jquery,knockout,o3,o3_string,o3_valid,o3_upclick,sprintf' );
 	$this->head_res( O3_FORM_JS_URL, 'o3_form.js' );
 	$this->head_res( O3_FORM_CSS_URL, 'o3_form.css', 'stylesheet' );	
 

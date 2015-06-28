@@ -204,7 +204,7 @@ function o3_remove_more( $chr, $count, $str ) {
 	*/
 function o3_convert( $str, $to = 'UTF-8', $from = '' ) {
 	$from = $from == '' ? mb_detect_encoding($str) : $from;
-	return mb_convert_encoding( $str, $to, $from );
+	return $from == '' ? $str : mb_convert_encoding( $str, $to, $from );
 }
 
 /**

@@ -114,6 +114,14 @@ def("O3_LOG_ALLOWED", false );
 /** Allow debuging */
 def("O3_DEBUG_ALLOWED", false );
 
+/* CACHE */
+
+/** Cache max file lifetime in seconds - default: 86400 * 14 (14 days)  */
+def('O3_CACHE_MAX_LIFETIME', 86400 * 14);
+
+/** Cache cleaning percent - default: 1*/
+def('O3_CACHE_CLEAN_USE_PERCENT',1);
+
 /*GENERAL*/
 
 /** Error text for general cases  */
