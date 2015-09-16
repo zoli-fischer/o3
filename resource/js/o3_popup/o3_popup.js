@@ -241,6 +241,7 @@ o3_popup = function( opts ) {
 								   tabindex: null,
 								   disabled: false,
 								   focused: false,
+								   className: '',
 								   onclick: null //onclick hadler
 								 }, entry );
 
@@ -248,11 +249,11 @@ o3_popup = function( opts ) {
 		  		var $container = null;
 		  		switch ( entry.type ) {
 		  			case 'button':
-		  				$container = jQuery('<input type="button" value="'+t.htmlsafe( entry.title )+'" class="o3_popup_container_button" tabindex="'+( entry.tabindex === null ? tabindex : entry.tabindex )+'" />').appendTo(t.$footer);
+		  				$container = jQuery('<input type="button" value="'+t.htmlsafe( entry.title )+'" class="o3_popup_container_button '+entry.className+'" tabindex="'+( entry.tabindex === null ? tabindex : entry.tabindex )+'" />').appendTo(t.$footer);
 		  				tabindex++; //next tab index
 		  				break;
 		  			case 'submit':
-		  				$container = jQuery('<input type="submit" value="'+t.htmlsafe( entry.title )+'" class="o3_popup_container_submit" tabindex="'+( entry.tabindex === null ? tabindex : entry.tabindex )+'" />').appendTo(t.$footer);
+		  				$container = jQuery('<input type="submit" value="'+t.htmlsafe( entry.title )+'" class="o3_popup_container_submit '+entry.className+'" tabindex="'+( entry.tabindex === null ? tabindex : entry.tabindex )+'" />').appendTo(t.$footer);
 		  				$container.click( function( event ) { t.submit() } );
 		  				tabindex++; //next tab index
 		  				break;

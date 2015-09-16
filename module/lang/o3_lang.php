@@ -351,17 +351,30 @@ class o3_lang {
 		}
 		return $buffer;	
 	}
-  
+  	
+  	/** boolean Injected external script or inline script. Default value: true */
+  	public $html_script_external = true;
+
+  	/**
+	* Enable or disable external javascript injection in head tag
+	* @param boolean $value Default: true
+	* @return void
+	*/
+	function set_html_script_external( $value = true ) {
+		$this->html_script_external = $value;
+	}
+
 	/**
 	* Generate the script tag for language javascript load
 	*
 	* @return string
 	*/
-	public function gen_html_script() {  	
+	public function gen_html_script() {
 		$buffer = '';
 		$url = $this->gen_html_script_url();
-		if ( $url != '' )
-			$buffer = '<script src="'.$url.'" type="text/javascript"></script>';
+		if ( $url != '' ) {
+			$buffer = $this->html_script_external ? '<script src="'.$url.'" type="text/javascript"></script>' : '<script>'.o3_get_url(str_replace('&amp;','&',$url)).'</script>';
+		}
 		return $buffer;
 	}
   

@@ -312,6 +312,51 @@ function o3_get_host( $url = null ) {
 	return $url;
 }
 
+/**
+ * Get URL content
+ * 
+ * @param string $url URL to get
+ * @param number $timeout timeout to wait for response.
+ * @return mixed Return value or false.
+ */
+function o3_get_url( $url, $timeout = 5 ) {
+	$result = false;
+
+	//check if curl_init available
+    if ( is_callable('curl_init') ) {
+        try {
+			$ch = curl_init();
+
+			curl_setopt($ch, CURLOPT_URL, $url);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);                    
+               
+            $result = @curl_exec($ch);
+               
+            curl_close($ch);
+        } catch (Exception $e) {
+        }
+    } else {
+    	$context = stream_context_create( 
+	        			array( 
+	        				'http'=> array( 
+	        					'timeout' => $timeout,
+	        				), 
+	        				'https'=> array(
+	        					'timeout' => $timeout,
+	        				),        			
+		        			'ssl' => array(
+						        'verify_peer' => false,
+						    )
+		        		)
+	        		);        	
+        $result = @file_get_contents( $url, false, $context );
+    }
+
+    return $result;
+}
+
 //ARRAY
 
 /**

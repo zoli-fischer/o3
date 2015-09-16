@@ -376,17 +376,46 @@ function o3_upload_max_size() {
 * Get content of URL
 *
 * @param string $url
+* @param int $timeout
 *
-* @return string Content of URL
+* @return string/boolean Content of URL or false if URL not found
 */
-function o3_url_get_contents( $url ) {
-	$ch = curl_init();
-	curl_setopt($ch, CURLOPT_URL, $url );
-	curl_setopt($ch, CURLOPT_HEADER, 0 );
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE );
-	$result = curl_exec($ch);
-	curl_close($ch);
-	return $result;
+function o3_url_get_contents( $url, $timeout = 5 ) {	
+	$result = false;
+
+	//check if curl_init available
+    if ( is_callable('curl_init') ) {
+        try {
+			$ch = curl_init();
+
+			curl_setopt($ch, CURLOPT_URL, $url);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);                    
+               
+            $result = @curl_exec($ch);
+               
+            curl_close($ch);
+        } catch (Exception $e) {
+        }
+    } else {
+    	$context = stream_context_create( 
+	        			array( 
+	        				'http'=> array( 
+	        					'timeout' => $timeout,
+	        				), 
+	        				'https'=> array(
+	        					'timeout' => $timeout,
+	        				),        			
+		        			'ssl' => array(
+						        'verify_peer' => false,
+						    )
+		        		)
+	        		);        	
+        $result = @file_get_contents( $url, false, $context );
+    }
+
+    return $result;
 }
 
 ?>

@@ -146,6 +146,11 @@ class o3 {
 												    array( O3_URL.'/resource/js/o3_tooltip/o3_tooltip.js', O3_RES_DIR.'/js/o3_tooltip/o3_tooltip.js' ),
 												    array( O3_URL.'/resource/js/o3_tooltip/o3_tooltip.css', O3_RES_DIR.'/js/o3_tooltip/o3_tooltip.css', 'stylesheet' ) ) );
 
+		//o3_popup no css
+		$this->head_framework( 'o3_tooltip_no_css', array( array( 'jquery,o3_no_css' ),
+												    array( O3_URL.'/resource/js/o3_tooltip/o3_tooltip.js', O3_RES_DIR.'/js/o3_tooltip/o3_tooltip.js' ) ) );
+
+
 
 		//clear cache
 		if ( O3_CACHE_CLEAN_USE_PERCENT > 0 && rand(1,100) <= O3_CACHE_CLEAN_USE_PERCENT ) {

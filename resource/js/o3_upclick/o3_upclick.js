@@ -155,6 +155,14 @@ o3_ajax_upload = function( opts, container ) {
 
 	//files
 	self.files = [];
+		
+	//convert file type to general file type image/png => image/*
+	self.general_file_type = function( type ) {
+		var types = type.split('/');
+		if ( types.length > 0 )
+			return types[0]+'/*';
+		return type;
+	};
 
 	//sent the request
 	self.send = function() {
@@ -173,7 +181,7 @@ o3_ajax_upload = function( opts, container ) {
 					//Check the file type
 					if ( self.opts.ignorefiletype === false ) {
 						if ( self.opts.accept != '' && file.type != '' ) {
-							if ( self.opts.accept.match(file.type) === null ) {
+							if ( !( self.opts.accept.match(file.type) !== null || self.opts.accept.match(self.general_file_type(file.type)) !== null ) ) {
 								self.onfail( self.failCodes.filetype );
 								return;
 							};
