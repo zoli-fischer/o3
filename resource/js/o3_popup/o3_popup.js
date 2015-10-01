@@ -195,7 +195,7 @@ o3_popup = function( opts ) {
 	t.init = function() {
 	   	
 	   	//create overlay	
-	   	t.$overlay = jQuery('<div class="o3_popup_overlay"></div>').appendTo('body');	
+	   	t.$overlay = jQuery('<iframe class="o3_popup_overlay" allowtransparency="true"></iframe>').appendTo('body');	
 		t.$overlay.css( { backgroundColor: t.opts.overlayColor, 
 	  		              opacity: t.opts.overlayOpacity } );
 
@@ -217,7 +217,7 @@ o3_popup = function( opts ) {
 	  	t.$header_title = jQuery('<div class="o3_popup_container_title"><span>'+t.htmlsafe( t.opts.header.title )+'</span></div>').appendTo(t.$header);
 	  	t.$header_title.css( { height: t.opts.header.height, 'line-height': t.opts.header.height } );
 		
-		t.$header_close = jQuery('<a href="javascript:{}" class="o3_popup_container_close" tabindex="10000"><span>x</span></a>').appendTo(t.$header);	  	
+		t.$header_close = jQuery('<button class="o3_popup_container_close" tabindex="10000"><span>x</span></button>').appendTo(t.$header);	  	
 	  	t.$header_close.css( { height: t.opts.header.height, 'line-height': t.opts.header.height, 
 	  						   'max-width': t.opts.header.height, 'min-width': t.opts.header.height,
 	  						   display: t.opts.header.showCloseButton === true ? 'block' : 'none' } );
@@ -346,7 +346,7 @@ o3_popup = function( opts ) {
 	  			break;
 	  		case 'url':
 		  		break;
-	  	};	
+	  	};
 
 	  	jQuery(window).resize(function(){t.handle_wnd_resize()}); //check on resize
 
@@ -374,7 +374,7 @@ o3_popup = function( opts ) {
 	/**
 	* show popup
 	*/	
-	t.show = function() {
+	t.open = t.show = function() {
 		if ( !t.visible ) {			
 
 			//after close set back the content
@@ -582,7 +582,7 @@ o3_popup = function( opts ) {
 
 		};
 	};
-
+	
 	/**
 	* Same as hide popup, but triggers the close events
 	*/
@@ -745,6 +745,17 @@ o3_popup.prototype.init_drag = function() {
 /*********************PUBLIC FUNCTIONS*********************/
 
 /**
+* Hide the top corner close button
+* @param boolean value Show/hide
+* @return void
+*/
+o3_popup.prototype.show_close = function( value ) {
+	value = typeof value == 'undefined' ? true : value;
+	this.opts.header.showCloseButton = value;	
+	this.$header_close.css( 'display', this.opts.header.showCloseButton === true ? 'block' : 'none' );	
+};
+
+/**
 * Disable the popup
 * @param boolean value Disable/enable
 * @return void
@@ -753,7 +764,7 @@ o3_popup.prototype.disable = function( value ) {
 	value = typeof value == 'undefined' ? true : value;
 	this.disabled = value;
 	
-	this.$container.find('input,select,textarea,a').attr('disabled',value);
+	this.$container.find('input,select,textarea,a,button,submit').attr('disabled',value);
 
 	//focus pop
 	if ( !navigator.userAgent.match(/(iPad|iPhone|iPod)/g) )
@@ -782,7 +793,7 @@ o3_popup.prototype.showLoad = function( value ) {
 * @return void
 */
 o3_popup.prototype.submit = function() {
-	return this.onsubmit != null ? this.onsubmit() : null;
+	return this.onsubmit != null ? this.onsubmit.call( this ) : null;
 };	
 
 /**

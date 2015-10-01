@@ -20,6 +20,20 @@ function o3_KO2JSON( data ) {
     return ko.toJSON( o3_KO2JS( data ) );
 };
 
+//make object's chidren observable
+function o3_make_children_observables( object ) {
+    var obj = !ko.isObservable(object) ? object : object();    
+
+    // Loop through its children
+    for ( var child in obj ) {
+        if ( !ko.isObservable(obj[child]) ) {                        
+            obj[child] = ko.observable( typeof obj[child] != 'object' ? obj[child] : o3_make_children_observables(obj[child]) );
+        };
+    };
+
+    return obj;
+};
+
 // Custom Knockout binding that makes elements shown/hidden via jQuery's fadeIn()/fadeOut() methods
 ko.bindingHandlers.o3_fadeVisible = {
     init: function(element, valueAccessor) {        
@@ -238,4 +252,19 @@ ko.bindingHandlers.o3_cssChange = {
         setInterval( function() { checkCssChange() }, 33 );
     },
     update: ko.bindingHandlers.value.update //just wrap the update binding handler
+};
+
+//on field key press run function
+ko.bindingHandlers.onenter = {
+    init: function (element, valueAccessor, allBindings, viewModel) {
+        var callback = valueAccessor();
+        jQuery(element).keypress(function (event) {
+            var keyCode = ( event.which ? event.which : event.keyCode );
+            if ( keyCode === 13 ) {
+                callback.call( viewModel );
+                return false;
+            }
+            return true;
+        });
+    }
 };

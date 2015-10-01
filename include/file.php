@@ -271,7 +271,7 @@ function o3_unlink( $file ) {
 */
 function o3_cache_file( $filename = '' ) {
 	$ext = o3_extension($filename);
-	if ( $filename == '' ) {
+	if ( $filename == '' || $filename == '.'.$ext ) {
 		$file = md5(o3_micro_time());
 		while ( file_exists(O3_CACHE_DIR.'/'.$file.( $ext != '' ? '.'.$ext : '' )) )
 			$file = md5(o3_micro_time());

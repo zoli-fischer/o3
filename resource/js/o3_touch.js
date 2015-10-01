@@ -296,7 +296,7 @@
 				t.esdown = null;
 			} else {
 
-				console.log('event: '+e.type+' '+t.attr('id'));
+				//console.log('event: '+e.type+' '+t.attr('id'));
 
 				//store event
 				t.esdown = e;
@@ -601,7 +601,7 @@
 				t.drs = false;
 				
 				//remove drag check event
-				remEvt( d, moveEvt, t.moveing );	
+				remEvt( d, moveEvt, t.moveing );
 				
 			} else if ( t.type == 'zoom' && t.zst ) {
 				

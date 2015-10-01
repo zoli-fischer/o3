@@ -52,14 +52,27 @@ class o3_manifest {
 	}
 
 	/**
+	* Add entry to comment part of the manifest file
+	* @param string $entry
+	*
+	* @return void
+	*/	
+	public function	comment( $entry ) {
+		if ( trim($entry) != '' && !isset($this->manifest['cache'][$entry]) ) {
+			$this->manifest['comment'][$entry] = $entry;
+		}
+	}
+
+	/**
 	* Add entry to cache part of the manifest file
 	* @param string $entry
 	*
 	* @return void
 	*/	
 	public function	cache( $entry ) {
-		if ( trim($entry) != '' && !isset($this->manifest['cache'][$entry]) )
+		if ( trim($entry) != '' && !isset($this->manifest['cache'][$entry]) ) {
 			$this->manifest['cache'][$entry] = $entry;
+		}
 	}
 
 	/**
@@ -168,7 +181,7 @@ class o3_manifest {
 			$cache_file_name = $this->cache_uniqid_manifest.'-'.($max_version+1).'-'.$cache_name.'.appcache';
 			
 			//set content
-			file_put_contents( $this->manifest_cache_dir.'/'.$cache_file_name, $buffer );
+			file_put_contents( $this->manifest_cache_dir.'/'.$cache_file_name, utf8_encode($buffer) );
 		}		
 
 		//return file path
@@ -183,9 +196,15 @@ class o3_manifest {
 			$manifest_file = $this->create_manifest();
 			if ( $manifest_file !== false ) {
 				$manifest_url = $this->manifest_cache_url.'/'.basename($manifest_file);
-				return str_replace( '<html>', '<html manifest="'.$manifest_url.'">', $buffer);
+				$buffer = str_replace( '<html>', '<html manifest="'.$manifest_url.'">', $buffer);
 			}
 		}
+
+		$buffer = str_replace( '#O3_MANIFEST_CACHE_COUNT#', count($this->manifest['cache']), $buffer );
+		$buffer = str_replace( '#O3_MANIFEST_FALLBACK_COUNT#', count($this->manifest['fallback']), $buffer );
+		$buffer = str_replace( '#O3_MANIFEST_NETWORK_COUNT#', count($this->manifest['network']), $buffer );
+		$buffer = str_replace( '#O3_MANIFEST_COMMENT_COUNT#', count($this->manifest['comment']), $buffer );
+
 		return $buffer;
 	}
   

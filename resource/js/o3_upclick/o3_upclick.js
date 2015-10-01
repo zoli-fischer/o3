@@ -15,6 +15,9 @@ o3_ajax_upload = function( opts, container ) {
 	//XMLHttpRequest
 	self.xhr = null;
 
+	//fix for network Error 0x2ef3
+	self.fix0x2ef3 = null;
+
 	//options
 	self.opts = $.extend( {
 		name: typeof self.$container.attr('name') != 'undefined' ? self.$container.attr('name') : 'file',
@@ -198,6 +201,14 @@ o3_ajax_upload = function( opts, container ) {
 
 					// Add the file to the request
 					formData.append( self.opts.name+'[]', file, file.name );
+				};
+
+	
+				//fix network Error 0x2ef3 on msie, send a get request before the post 
+				if ( self.fix0x2ef3 === null /*&& ( window.ActiveXObject || "ActiveXObject" in window )*/ ) {
+					self.fix0x2ef3 = new XMLHttpRequest();
+					self.fix0x2ef3.open( 'GET', self.opts.action == '' ? window.location : self.opts.action, false );
+					self.fix0x2ef3.send();
 				};
 
 				//Open the connection

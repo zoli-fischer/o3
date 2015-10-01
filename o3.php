@@ -133,6 +133,10 @@ class o3 {
 												    array( O3_URL.'/resource/js/o3_popnote/o3_popnote.js', O3_RES_DIR.'/js/o3_popnote/o3_popnote.js' ),
 												    array( O3_URL.'/resource/js/o3_popnote/o3_popnote.css', O3_RES_DIR.'/js/o3_popnote/o3_popnote.css', 'stylesheet' ) ) );
 
+		//o3_popup
+		$this->head_framework( 'o3_popnote_no_css', array( array( 'jquery,o3_no_css' ),
+												    array( O3_URL.'/resource/js/o3_popnote/o3_popnote.js', O3_RES_DIR.'/js/o3_popnote/o3_popnote.js' ) ) );
+
 		//o3_scrolltop
 		$this->head_framework( 'o3_scrolltop', array( array( 'jquery,o3' ),
 												      array( O3_URL.'/resource/js/o3_scrolltop/o3_scrolltop.js', O3_RES_DIR.'/js/o3_scrolltop/o3_scrolltop.js' ),
@@ -869,7 +873,10 @@ class o3_ajax_result {
 	* Print out result data as json and stops the script
 	* @return self
 	*/
-	public function flush() {
+	public function flush() {		
+		
+		header('Content-Type: application/json; charset=utf-8');
+
 		//on error send page not found
 		if( $this->fail ) 
 			o3_header_code(404);
