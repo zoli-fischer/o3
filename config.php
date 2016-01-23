@@ -71,6 +71,12 @@ def("O3_ADMIN_DIR", O3_DIR."/admin");
 /** Image magic script */
 def("O3_IMAGE_MAGIC", "convert");
 
+/** PNG optimizer */
+def("O3_IMAGE_PNGCRUSH", "pngcrush");
+
+/** JPG optimizer */
+def("O3_IMAGE_JPEGOPTIM", "jpegoptim");
+
 /**
  * The location of a temporary directory.
  * The directory specified must be writeable by the webserver process. 

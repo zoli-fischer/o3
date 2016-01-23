@@ -14,6 +14,8 @@
 
 /** string Microsoft Internet Explorer Value: msie */
 DEFINE('O3_MSIE','msie');
+/** string Microsoft Edge Value: msie */
+DEFINE('O3_EDGE','edge');
 /** string Mozilla Firefox Value: ff */
 DEFINE('O3_FF','ff');
 /** string Apple Safari Value: safari */
@@ -49,6 +51,7 @@ DEFINE('O3_MOBILE','mobile');
 
 $o3_browser_list = array ( 
 					O3_MSIE => 'MSIE',
+					O3_EDGE => 'Edge',
 					O3_MSGECKO => 'Trident',
 					O3_FF => 'Firefox',
 					O3_OPERA => 'Opera',
@@ -178,7 +181,7 @@ function o3_ios( $ua =  O3_HTTP_USER_AGENT ) {
 *
 * @param string $ua (optional) User agent string. Default value: Global user agent string
 *
-* @return string O3_MSIE, O3_MSGECKO, O3_FF, O3_OPERA, O3_OPR, O3_CHROME,	O3_SAFARI
+* @return string O3_MSIE, O3_EDGE, O3_MSGECKO, O3_FF, O3_OPERA, O3_OPR, O3_CHROME,	O3_SAFARI
 */
 function o3_get_browser( $ua = O3_HTTP_USER_AGENT ) {
 	global $o3_browser_list;	
@@ -249,6 +252,25 @@ function o3_msie( $ua =  O3_HTTP_USER_AGENT ) {
 	  }
 	} else if ( $b == O3_MSGECKO ) {
 		return o3_trident( $ua )+4;
+	}
+	return false;
+}	
+
+/**
+* Get Microsoft Edge version from user agent string
+*
+* @param string $ua (optional) User agent string. Default value: Global user agent string
+*
+* @return string|boolean False if the browser is not Mozilla Firefox
+*/
+function o3_edge( $ua =  O3_HTTP_USER_AGENT ) {
+	if ( o3_get_browser( $ua )== O3_EDGE ) {
+		preg_match('/Edge\/([0-9]{1,2}\.[0-9])/',$ua,$reg);
+	  if(!isset($reg[1])) {
+	    return false;
+	  } else {
+	    return intval($reg[1]);
+	  }
 	}
 	return false;
 }	
@@ -641,6 +663,14 @@ function o3_ua_body_classes( $ua = O3_HTTP_USER_AGENT ) {
 	push( $buffer, $value, $key );
 	if ( $value !== false ) {
 		$key = 'ff'.$value;
+		push( $buffer, $value, $key );
+	}
+
+	$value = o3_edge( $ua );
+	$key = 'edge';
+	push( $buffer, $value, $key );
+	if ( $value !== false ) {
+		$key = 'edge'.$value;
 		push( $buffer, $value, $key );
 	}
 	

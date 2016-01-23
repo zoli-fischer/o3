@@ -18,6 +18,24 @@ o3_ajax_upload = function( opts, container ) {
 	//fix for network Error 0x2ef3
 	self.fix0x2ef3 = null;
 
+	//allow safari stack fix
+	self.allow_safari_stack_fix = false;
+
+	//progress percent
+	self.percent = 0;
+
+	//fix safari stuck error
+	self.upload_stuck_timer = null;
+	self.upload_stuck_timer_start = function() {
+		clearTimeout(self.upload_stuck_timer);
+		//only on safari
+		if ( self.allow_safari_stack_fix && navigator.appVersion.indexOf("Safari") != -1 )
+			self.upload_stuck_timer = setTimeout( self.check_progress_change, 3000);
+	};
+	self.upload_stuck_timer_stop = function() {
+		clearTimeout(self.upload_stuck_timer);
+	};
+
 	//options
 	self.opts = $.extend( {
 		name: typeof self.$container.attr('name') != 'undefined' ? self.$container.attr('name') : 'file',
@@ -28,6 +46,7 @@ o3_ajax_upload = function( opts, container ) {
 		ignorefilesize: false, //true - don't check file size before upload
 		maxfilesize: 0,
 		sendonchange: false,
+		onbeforesend: null,
 		onsend: null,
 		onprogress: null,
 		onload: null,
@@ -53,9 +72,48 @@ o3_ajax_upload = function( opts, container ) {
 		general: 10
 	};
 
+	//change progress percent
+	self.progress_change_percent = 0;
+
+	//check if progress is stucked
+	self.check_progress_change = function() {
+		if ( self.status == 'sending' ) {
+			//create new timer
+			self.upload_stuck_timer_start();
+
+			if ( self.percent < 100 ) {
+				if ( self.progress_change_percent != self.percent ) {
+					console.log('progress not stucked '+self.progress_change_percent+' '+self.percent);
+					self.progress_change_percent = self.percent;
+				} else {
+					self.upload_stuck_timer_stop();
+					console.log('progress stucked '+self.progress_change_percent+' '+self.percent);
+					self.resend();
+				}
+			};
+		};
+	};
+
+	//set percent
+	self.set_percent = function( percent ) {
+		var percent = percent > 100 ? 100 : percent;
+
+		//set first chagne percent
+		if ( percent > 0 && self.progress_change_percent == 0 )
+			self.progress_change_percent = percent;
+
+		self.percent = percent;
+		if ( self.percent === 0 )
+			self.progress_change_percent = 0;
+	};
+
 	//on upload progress
 	self.onprogress = function( event ) {
 		if ( event.lengthComputable ) {
+			self.set_percent( ( event.loaded / event.total ) * 100 );
+			console.log('Progress'+self.percent);
+
+			//callback
 			if ( self.opts.onprogress !== null )
 				self.opts.onprogress.call( self, event );
 		};
@@ -63,19 +121,23 @@ o3_ajax_upload = function( opts, container ) {
 
 	//on load
 	self.onload = function( event ) {
-		//alert(self.xhr.responseText);
-		if ( self.xhr.status === 200 ) {
-			self.oncomplete( event );
-		} else {
-			self.onfail( self.failCodes.general, event );
-		}
+		if ( self.xhr ) {
+			console.log('Load'+self.xhr.status);
+			if ( self.xhr.status === 200 ) {
+				self.oncomplete( event );
+			} else {
+				self.onfail( self.failCodes.general, event );
+			};
 
-		if ( self.opts.onload !== null )
-			self.opts.onload.call( self, event );		
+			if ( self.opts.onload !== null )
+				self.opts.onload.call( self, event );		
+		};
 	};
 
 	//on upload failed / error
 	self.onfail = function( failCode, event ) {
+		if ( self.xhr ) 
+			console.log('Error'+self.xhr.status);
 		self.status = 'failed';
 		if ( self.opts.onerror !== null )
 			self.opts.onerror.call( self, { code: failCode, event: event } );		
@@ -90,6 +152,8 @@ o3_ajax_upload = function( opts, container ) {
 
 	//on abort
 	self.onabort = function( event ) {
+		if ( self.xhr )
+			console.log('Abort'+self.xhr.status);
 		self.status = '';
 		if ( self.opts.onabort !== null )
 			self.opts.onabort.call( self, event );		
@@ -100,6 +164,64 @@ o3_ajax_upload = function( opts, container ) {
 		self.status = 'sending';
 		if ( self.opts.onsend !== null )
 			self.opts.onsend.call( self );		
+	};
+
+	//on ready state change
+	self.onreadystatechange = function(event) {
+		/*
+		if ( self.xhr.readyState == 4 ) {			
+			var readBody = function(xhr) {
+			    var data;
+			    if (!xhr.responseType || xhr.responseType === "text") {
+			        data = xhr.responseText;
+			    } else if (xhr.responseType === "document") {
+			        data = xhr.responseXML;
+			    } else {
+			        data = xhr.response;
+			    }
+			    return data;
+			};
+        	console.log(readBody(self.xhr));        	
+    	}
+    	*/
+	};
+
+	//create xhr
+	self.createxhr = function() {
+		if ( typeof XMLHttpRequest != 'undefined' ) {
+			
+			//abort request if needed
+			self.abort();
+
+			//clear request
+			delete self.xhr;
+			self.xhr = null;
+
+			//Set up the request
+			self.xhr = new XMLHttpRequest();
+
+			//Set up a upload progress
+			if ( self.xhr.upload ) {
+				self.xhr.upload.onprogress = self.onprogress;
+			} else {
+				self.xhr.onprogress = self.onprogress;
+			};
+
+			//Set up a handler for when the request finishes
+			self.xhr.onload = self.onload;
+
+			//Set up error handler
+			self.xhr.onerror = self.onfail;
+
+			//Set up abort handler
+			self.xhr.onabort = self.onabort;
+		
+			//Set up state change handler
+			self.xhr.onreadystatechange = self.onreadystatechange;
+
+		} else {
+			console.log('O3 Ajax Upload: XMLHttpRequest is missing!');
+		};
 	};
 
 	/** Constructor */
@@ -122,38 +244,13 @@ o3_ajax_upload = function( opts, container ) {
 				self.$container.val('');
 			});
 
-		if ( typeof XMLHttpRequest != 'undefined' ) {
-
-			//Set up the request
-			self.xhr = new XMLHttpRequest();
-
-			//Set up a upload progress
-			if ( self.xhr.upload ) {
-				self.xhr.upload.onprogress = self.onprogress;
-			} else {
-				self.xhr.onprogress = self.onprogress;
-			}
-
-			//Set up a handler for when the request finishes
-			self.xhr.onload = self.onload;
-
-			//Set up error handler
-			self.xhr.onerror = self.onerror;
-
-			//Set up abort handler
-			self.xhr.onabort = self.onabort;
-
-
-		} else {
-			console.log('O3 Ajax Upload: XMLHttpRequest is missing!');
-		};
-
 	};
 	self.constructor__();
 
 	//abort upload
 	self.abort = function() {
-		self.xhr.abort();
+		if ( self.xhr )
+			self.xhr.abort();
 	};
 
 	//files
@@ -167,15 +264,57 @@ o3_ajax_upload = function( opts, container ) {
 		return type;
 	};
 
+	//resent the request
+	self.resend = function() {
+		if ( typeof FormData != 'undefined' ) {
+			//stop sutck checker
+			self.upload_stuck_timer_stop();
+
+			//clear perncet
+			self.set_percent(0);
+				
+			//fix network Error 0x2ef3 on msie, send a get request before the post 
+			if ( typeof o3_fix_0x2ef3 == 'function' )
+				o3_fix_0x2ef3( self.opts.action == '' ? window.location : self.opts.action );
+
+			//before send callback
+			if ( self.opts.onbeforesend !== null )
+				self.opts.onbeforesend.call( self );	
+
+			//create xhr
+			self.createxhr();
+
+			//Open the connection
+			self.xhr.open( 'POST', self.opts.action == '' ? window.location : self.opts.action, true );
+			
+			//Send the data
+			self.xhr.send( self.formData );
+
+			//start sutck checker
+			self.upload_stuck_timer_start();
+
+			//trigger onsend event
+			self.onsend();			
+		} else {
+			console.log('O3 Ajax Upload: FormData is missing!');
+		};
+	};
+
+	self.formData = typeof FormData != 'undefined' ? new FormData() : null;
+
 	//sent the request
-	self.send = function() {
+	self.send = function() {		
 		if ( typeof FormData != 'undefined' ) {
 			//Get the selected files from the input
 			self.files = self.container.files;
 
 			if ( self.files.length > 0 ) {
+
+				//clear perncet
+				self.set_percent(0);				
+	
 				//Create a new FormData object
-				var formData = new FormData();
+				self.formData = new FormData();
 
 				//Loop through each of the selected files
 				for (var i = 0; i < self.files.length; i++) {
@@ -200,22 +339,28 @@ o3_ajax_upload = function( opts, container ) {
 					};
 
 					// Add the file to the request
-					formData.append( self.opts.name+'[]', file, file.name );
+					self.formData.append( self.opts.name+'[]', file, file.name );
 				};
 
-	
 				//fix network Error 0x2ef3 on msie, send a get request before the post 
-				if ( self.fix0x2ef3 === null /*&& ( window.ActiveXObject || "ActiveXObject" in window )*/ ) {
-					self.fix0x2ef3 = new XMLHttpRequest();
-					self.fix0x2ef3.open( 'GET', self.opts.action == '' ? window.location : self.opts.action, false );
-					self.fix0x2ef3.send();
-				};
+				if ( typeof o3_fix_0x2ef3 == 'function' )
+					o3_fix_0x2ef3( self.opts.action == '' ? window.location : self.opts.action );
+
+				//before send callback
+				if ( self.opts.onbeforesend !== null )
+					self.opts.onbeforesend.call( self );	
+
+				//create xhr
+				self.createxhr();
 
 				//Open the connection
 				self.xhr.open( 'POST', self.opts.action == '' ? window.location : self.opts.action, true );
 				
 				//Send the data
-				self.xhr.send( formData );
+				self.xhr.send( self.formData );
+
+				//start sutck checker
+				self.upload_stuck_timer_start();
 
 				//trigger onsend event
 				self.onsend();

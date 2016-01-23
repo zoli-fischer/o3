@@ -26,15 +26,15 @@ function o3_header_encoding( $content_type = 'text/html', $charset = 'utf-8' ) {
 	header('Content-Type: '.$content_type.( $charset != '' ? '; charset='.$charset : '' ) );
 }
 
-/**
- * Redirect script to a URL
- *
- * @param string $url Redirect to this URL
- *
- * @return void
- */
-function o3_redirect( $url ) {
-	header('location: '.$url);
+/*
+* Redirect to URL
+*
+* @param string $url Redirect to this URL
+* @param boolean $replace Flag to replace headers
+* @param int $http_response_code Forces the HTTP response code 
+*/
+function o3_redirect( $url, $replace = true, $http_response_code = null ) {
+	header( 'location: '.$url, $replace, $http_response_code );
 	die();
 }
 

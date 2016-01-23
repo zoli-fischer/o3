@@ -125,8 +125,8 @@ class o3_mysqli extends mysqli {
 
 		$sql = "SELECT ".$this->escape_string($fields)." FROM ".$this->escape_string( $table_name )." ".
 			  ( count($conditions_list) > 0 ? " WHERE ".implode( ' AND ', $conditions_list ) : "" )." ".
-			  ( trim($limit) != '' ? " LIMIT ".$this->escape_string($limit) : "" )." ".
-			  ( trim($orderby) != '' ? " ORDER BY ".$this->escape_string($orderby) : "" )." ";
+			  ( trim($orderby) != '' ? " ORDER BY ".$this->escape_string($orderby) : "" )." ".
+			  ( trim($limit) != '' ? " LIMIT ".$this->escape_string($limit) : "" )." ";
 		
 		return $this->query( $sql );
 
@@ -145,7 +145,7 @@ class o3_mysqli extends mysqli {
 	 * @return mysqli query result
 	 */	
 	public function select_first( $table_name, $conditions, $fields = '*', $orderby = '' ) {	
-		$result = $this->select( $table_name, $conditions, $fields, $orderby );
+		$result = $this->select( $table_name, $conditions, $fields, '1', $orderby );
 		if ( $result !== false && $result->num_rows > 0 )
 			return $result->fetch_object();
 		return false;

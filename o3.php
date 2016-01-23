@@ -102,6 +102,9 @@ class o3 {
 		$this->head_framework( 'bootstrap', array( array( O3_URL.'/resource/js/lib/bootstrap/3-latest/js/bootstrap.min.js', O3_RES_DIR.'/js/lib/bootstrap/3-latest/js/bootstrap.min.js' ),
 											      array( O3_URL.'/resource/js/lib/bootstrap/3-latest/css/bootstrap.min.css', '', 'stylesheet' ) ) );
 
+		//bootstrap no css
+		$this->head_framework( 'bootstrap_no_css', array( array( O3_URL.'/resource/js/lib/bootstrap/3-latest/js/bootstrap.min.js', O3_RES_DIR.'/js/lib/bootstrap/3-latest/js/bootstrap.min.js' ) ) );
+
 		//o3
 		$this->head_framework( 'o3', array( array( O3_URL.'/resource/js/o3.js', O3_RES_DIR.'/js/o3.js' ),
 											array( O3_URL.'/resource/css/o3.css', O3_RES_DIR.'/css/o3.css', 'stylesheet' ) ) );
@@ -112,6 +115,7 @@ class o3 {
 		$this->head_framework( 'o3_string', array( array( O3_URL.'/resource/js/o3_string.js', O3_RES_DIR.'/js/o3_string.js' ) ) );
 		$this->head_framework( 'o3_touch', array( array( O3_URL.'/resource/js/o3_touch.js', O3_RES_DIR.'/js/o3_touch.js' ) ) );
 		$this->head_framework( 'o3_valid', array( array( O3_URL.'/resource/js/o3_valid.js', O3_RES_DIR.'/js/o3_valid.js' ) ) );
+		$this->head_framework( 'o3_device', array( array( O3_URL.'/resource/js/o3_device.js', O3_RES_DIR.'/js/o3_device.js' ) ) );
 		$this->head_framework( 'o3_all', array( array( 'o3,o3_date,o3_route,o3_native,o3_string,o3_touch,o3_valid' ) ) );
 
 	    //o3_table

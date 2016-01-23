@@ -581,7 +581,7 @@ $attachment
 		$headers .= "X-Mailer: ".$_SERVER['HTTP_HOST']."\r\n";
 	}
 
-	return mail( $to, '=?UTF-8?B?'.base64_encode(o3_convert($subject)).'?=', $message, $headers ); 
+	return mail( $to, '=?UTF-8?B?'.base64_encode(o3_convert($subject)).'?=', $message, $headers); 
 }
  
 

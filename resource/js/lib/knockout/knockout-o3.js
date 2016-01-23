@@ -34,6 +34,20 @@ function o3_make_children_observables( object ) {
     return obj;
 };
 
+//create swap 2 items in observable array
+if ( ko && !ko.observableArray.fn.swap ) {
+    ko.observableArray.fn.swap = function( index1, index2 ) {
+        this.valueWillMutate();
+
+        //swap with use of a temp var
+        var temp = this()[index1];
+        this()[index1] = this()[index2];
+        this()[index2] = temp;
+
+        this.valueHasMutated();
+    };
+};
+
 // Custom Knockout binding that makes elements shown/hidden via jQuery's fadeIn()/fadeOut() methods
 ko.bindingHandlers.o3_fadeVisible = {
     init: function(element, valueAccessor) {        

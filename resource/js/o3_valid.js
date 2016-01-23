@@ -47,3 +47,12 @@ function o3_valid_number( str ) {
 function o3_valid_float( str ) {
 	return ( str != null && str.toString().replace(/^\s+|\s+$/gm,'').length > 0 && str.toString().replace(',','.').match(/^-?\d*(\.\d+)?$/) );
 };
+
+/**
+* Check if string is a valid url
+* @param string str String to check
+* @return boolean True if the string is a valid url
+*/
+function o3_valid_url( str ) {
+	return /\b(https?|ftp|file):\/\/[\-A-Za-z0-9+&@#\/%?=~_|!:,.;]*[\-A-Za-z0-9+&@#\/%=~_|‌​]/.test( str );
+};

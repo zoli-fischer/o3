@@ -85,6 +85,25 @@ class o3_mini {
 		$this->minimize_css = $value;
 	}
 
+	/*
+	* Parse less and compress css
+	*/
+	public function less_parse( $content ) {
+
+		require_once('o3_less_parser.php');
+		$parser = new o3\module\mini\o3_less_parser();
+		$parser->parse( $content, '' );
+		$content .= $parser->getCss();
+		
+		//minimize if needed
+		if ( $this->minimize && $this->minimize_css ) {
+			require_once('o3_css_compressor.php');
+			$content = o3\module\mini\o3_css_compressor::process( $content );
+		}
+
+		return $content;
+	}
+
 	/**
 	 * Genarate cache file in the cache folder and return the filename
 	 *

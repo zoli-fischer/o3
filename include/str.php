@@ -167,12 +167,12 @@ function o3_salt_decode( $str, $salt = '' ) {
 	*/
 function o3_sanitize( $str ) {			
 	$str = o3_is_utf8($str) ? $str : o3_convert($str);
-  $str = preg_replace('~[^\\pL0-9_]+~u', '-', $str); // substitutes anything but letters, numbers and '_' with separator
-  $str = trim($str, "-");
-  $str = @iconv("utf-8", "us-ascii//TRANSLIT", $str); // TRANSLIT does the whole job
-  $str = strtolower($str);
-  $str = preg_replace('~[^-a-z0-9_]+~', '', $str); // keep only letters, numbers, '_' and separator
-  return o3_remove_more('-',2,$str);
+	$str = preg_replace('~[^\\pL0-9_]+~u', '-', $str); // substitutes anything but letters, numbers and '_' with separator
+	$str = trim($str, "-");
+	$str = @iconv("utf-8", "us-ascii//TRANSLIT", $str); // TRANSLIT does the whole job
+	$str = strtolower($str);
+	$str = preg_replace('~[^-a-z0-9_]+~', '', $str); // keep only letters, numbers, '_' and separator
+	return o3_remove_more('-',2,$str);
 }
 
 /**

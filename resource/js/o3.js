@@ -17,6 +17,10 @@ function o3_ajax( url, settings ) { //todo optimize
     var success = settings.success  ? settings.success : function() {},
         error = settings.error ? settings.error : function() {};
     console.log('AJAX: '+url);
+    
+    //fix error 0x2ef3
+    o3_fix_0x2ef3( url );
+
     settings.success = function (data) { if ( typeof data.o3_console != 'undefined' && typeof data.o3_console != 'undefined' ) for ( var i = 0; i < data.o3_console.length; i++ ) console.log(data.o3_console[i]); success(data); };
     settings.error = function (jqXHR, status, error_thrown) { 
       console.log('AJAX Status: '+status);
@@ -27,6 +31,10 @@ function o3_ajax( url, settings ) { //todo optimize
     return jQuery.ajax( url, settings );
   } else {
     console.log('AJAX: '+url.url);
+
+    //fix error 0x2ef3
+    o3_fix_0x2ef3( url.url );
+
     var success = url.success  ? url.success : function() {},
         error = url.error ? url.error : function() {};
     url.success = function (data) { if ( typeof data.o3_console != 'undefined' && typeof data.o3_console != 'undefined' ) for ( var i = 0; i < data.o3_console.length; i++ ) console.log(data.o3_console[i]); success(data); };
@@ -37,8 +45,41 @@ function o3_ajax( url, settings ) { //todo optimize
       error(jqXHR, status, error_thrown); 
     };
     return jQuery.ajax( url );
-  } 
-}
+  }; 
+};
+
+//fix msie/edge hanging/error on ajax post
+function o3_fix_0x2ef3( url ) {
+  if  ( typeof XMLHttpRequest != 'undefined' && navigator.appVersion.indexOf("Trident") != -1 || navigator.appVersion.indexOf("Edge/") != -1 /* || navigator.appVersion.indexOf("Safari") != -1 */ ) {
+
+    //get url
+    url = typeof url == 'undefined' ? window.location : url;  
+    
+    //if relative use window location
+    if ( !(new RegExp('^(?:[a-z]+:)?//', 'i')).test(url) ) {
+      url = window.location.protocol+'//'+window.location.hostname+( window.location.port != '' ? ':'+window.location.port : '' );
+    } else {
+      var url_info = o3_url_info(url);
+      if ( url_info !== false ) {
+        url = url_info.protocol+'//'+url_info.hostname+':'+url_info.port;
+      } else {
+        return;
+      }
+    }      
+
+    //only if protocol is https
+    if ( url.toString().toLowerCase().indexOf('https:') === 0 ) {
+
+      console.log('fix0x2ef3'+url);
+
+      jQuery.ajax({
+        async: false,
+        url: url
+      });
+
+    };
+  };
+};
 
 /*
 * Create ajax handler
@@ -67,7 +108,7 @@ function o3_ajax_call( url, data, onSuccess, onError, onFail ) {
                if ( data.success_msg ) 
                  alert( o3_lang_(data.success_msg) );
             }  
-          } else {
+          } else {            
             if ( onError ) {         
               if ( typeof onError == 'function') 
                 onError( data );
@@ -78,7 +119,7 @@ function o3_ajax_call( url, data, onSuccess, onError, onFail ) {
           }         
           
         },
-        error: function (jqXHR, status, error) {          
+        error: function (jqXHR, status, error) {
           if ( onFail ) {
             if ( typeof onFail == 'function')
               onFail( jqXHR, status, error );
@@ -112,16 +153,18 @@ function o3_script( url, async ) {
 
 //check for condition and runc function when is true
 function o3_trigger( func, cond, delay ) {  
-  var t = this;
+  return new (function( func, cond, delay ){
+    var t = this;
 
-  delay = typeof delay == 'undefined' ? 100 : delay;
+    delay = typeof delay == 'undefined' ? 100 : delay;
 
-  t.interval = setInterval( function() {    
-    if ( cond() ) {
-      clearInterval(t.interval);
-      func();
-    };
-  }, delay );
+    t.interval = setInterval( function() {
+      if ( cond() ) {
+        clearInterval(t.interval);
+        func();
+      };
+    }, delay );
+  })( func, cond, delay );
 };
 
 //local storage & cookies
@@ -238,4 +281,26 @@ function o3_param2url( url, param ){
 */
 function o3_basename( path ) {
   return path.split(/[\\/]/).pop();
+};
+
+
+/**
+ *  Break apart any url into parts
+ */
+function o3_url_info( url ) {
+    if ( 'createElement' in document ) {
+      //create a link in the DOM and set its href
+      var link = document.createElement('a');
+      link.setAttribute('href', url);
+
+      //return an easy-to-use object that breaks apart the path
+      return {
+          hostname: link.hostname,  
+          port:     link.port,      
+          search:   link.search,
+          path:     link.pathname,
+          protocol: link.protocol 
+      };
+    };
+    return false;
 };

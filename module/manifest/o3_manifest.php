@@ -101,15 +101,16 @@ class o3_manifest {
 	public function unlink_all_manifest() {
 		global $o3;
 		//get files
-		$files = glob(preg_replace('/(\*|\?|\[)/', '[$1]', $this->manifest_cache_dir.'/').'*.appcache');
-		
+		$files = glob(preg_replace('/(\*|\?|\[)/', '[$1]', $this->manifest_cache_dir.'/').'*.appcache');		
 		if ( count($files) > 0 )
 			foreach ( $files as $filename ) {
+				/*
 				$basename = basename($filename);
 				$_ = explode( '-', $basename );							
 				if ( count($_) == 3 && $_[0] == $this->cache_uniqid_manifest ) {					
+				*/
 					o3_unlink($filename);
-				}
+				//}
 			}
 	}	
 
@@ -141,10 +142,20 @@ class o3_manifest {
 		$buffer .= "\n\nNETWORK:\n*\n\n";
 
 		//generate cache name
-		$cache_name = md5($uri);
-		$cache_file_name = '';
-		$max_version = 0;
-		$files = glob(preg_replace('/(\*|\?|\[)/', '[$1]', $this->manifest_cache_dir.'/').'*.appcache');
+		$cache_name = md5($uri.$buffer);
+		$cache_file_name = $cache_name.'.appcache';		
+		//$files = glob(preg_replace('/(\*|\?|\[)/', '[$1]', $this->manifest_cache_dir.'/').'*.appcache');
+
+		//check if exits
+		if ( file_exists($this->manifest_cache_dir.'/'.$cache_file_name) ) {
+			$content = file_get_contents($this->manifest_cache_dir.'/'.$cache_file_name);
+			if ( $content != $buffer ) 
+				$cache_file_name = '';
+		} else {		
+			$cache_file_name = '';
+		};
+
+		/*
 		$versions = array();
 		if ( count($files) > 0 ) {
 			foreach ( $files as $filename ) {
@@ -174,11 +185,12 @@ class o3_manifest {
 				}
 			}
 		}
+		*/
 
 		//in no cache file found
 		if( $cache_file_name == '' ) {			
 			//create cache file
-			$cache_file_name = $this->cache_uniqid_manifest.'-'.($max_version+1).'-'.$cache_name.'.appcache';
+			$cache_file_name = $this->cache_uniqid_manifest.'-'.$cache_name.'.appcache';
 			
 			//set content
 			file_put_contents( $this->manifest_cache_dir.'/'.$cache_file_name, utf8_encode($buffer) );

@@ -103,6 +103,15 @@ class o3_lang {
 	  }
 	  return $this->current;
   }  
+
+  /**
+  * Clear loaded language
+  */
+  public function unload() {
+  	$this->list = array();
+	$this->current = '';
+	$this->collections = array();
+  }
   
   //load collection
   //$collections - use '*' for all collection, '' for general collection 
@@ -179,7 +188,7 @@ class o3_lang {
 	 *
 	 * @return void
 	 */
-  function _( $index, $collection = '*', $language = '' ) {
+  function _( $index, $collection = '*', $language = '' ) {  	
   	return $this->get( $index, $collection, $language );
   }
   
@@ -347,7 +356,7 @@ class o3_lang {
 			foreach ( $this->list as $key => $value ) {	
 				$keys[] = $key;
 			}   
-			$buffer = $this->lang_js_url.'?ls='.implode(',',$keys).'&amp;l='.$this->current.'&amp;c='.implode(',',$this->collections);
+			$buffer = $this->lang_js_url.'?ls='.implode(',',$keys).'&l='.$this->current.'&c='.implode(',',$this->collections);
 		}
 		return $buffer;	
 	}

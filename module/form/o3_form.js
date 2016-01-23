@@ -285,7 +285,7 @@ function o3_form_submit( appview_form ) {
 		var data = {};
 		data[appview_form.id] = appview_form.submit_data_original();
 		data['o3-form-code'] = appview_form.security_code();		
-		data = jQuery.extend( data, appview_form.submit_data() );
+		data = jQuery.extend( data, typeof appview_form.submit_data === 'function' ? appview_form.submit_data() : appview_form.submit_data );
 		data[appview_form.id] = JSON.stringify(data[appview_form.id]);
 			
 		if ( appview_form.ajax )
@@ -423,7 +423,7 @@ function o3_form( name ) {
 /*
 * Get autoloaded o3 form app
 */ 
-function o3_form_app( name ) {
+function o3_form_app( name ) {	
 	return o3_form_autoload_forms[name] ? o3_form_autoload_forms[name] : false;
 };
 

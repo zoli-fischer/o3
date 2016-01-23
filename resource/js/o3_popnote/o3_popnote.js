@@ -9,8 +9,8 @@
 
 o3_popnote = function( opts ) {
 
-	var t = this;
-	$ = jQuery;
+	var t = this,
+		$ = jQuery;
 
 	//options
 	t.opts = $.extend({ 
@@ -86,7 +86,8 @@ o3_popnote.prototype.clear = function () {
 
 /** add new card */
 o3_popnote.prototype.push = function ( msg, lifetime, show_close ) {
-	var t = this;
+	var t = this,
+		$ = jQuery;
 	lifetime = typeof lifetime != 'undefined' && lifetime ? lifetime : t.card_lifetime; 
 	show_close = typeof show_close != 'undefined' ? show_close : t.card_show_close; 
 

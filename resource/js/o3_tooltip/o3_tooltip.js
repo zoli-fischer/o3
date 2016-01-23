@@ -24,7 +24,7 @@ o3_tooltip_class = function( opts ) {
 						init: ''
 					  }, opts );
 	
-	//popup container
+	//tooltip container
 	t.$container = null;
 	t.container = null;
 

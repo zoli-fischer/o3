@@ -472,7 +472,7 @@ o3_popup = function( opts ) {
 	t.loaded = false;
 	t.load = function() {
 		if ( t.onbeforeload )
-			t.onbeforeload();
+			t.onbeforeload.call( t );
 
 		if ( t.opts.body.type == 'url' ) {
 			
@@ -491,17 +491,17 @@ o3_popup = function( opts ) {
 																  t.loaded = true;
 
 																  if ( t.onafterload )
-																  	 t.onafterload( responseText, textStatus, XMLHttpRequest );
+																  	 t.onafterload.call( t, responseText, textStatus, XMLHttpRequest );
 
 																});
 				};
 			} else {
 				if ( t.onafterload )
-					t.onafterload();
+					t.onafterload.call( t );
 			};	
 		} else {
 			if ( t.onafterload )
-				t.onafterload();
+				t.onafterload.call( t );
 		};
 	};
 
@@ -590,7 +590,7 @@ o3_popup = function( opts ) {
 
 		//run handler
 		if ( t.onbeforeclose != null )
-			t.onbeforeclose();
+			t.onbeforeclose.call( t );
 
 		//hide popup
 		t.hide();
@@ -618,7 +618,7 @@ o3_popup = function( opts ) {
 
 		//run handler
 		if ( t.onafterclose != null )
-			t.onafterclose();
+			t.onafterclose.call( t );
 	};
 
 	/**
@@ -793,7 +793,7 @@ o3_popup.prototype.showLoad = function( value ) {
 * @return void
 */
 o3_popup.prototype.submit = function() {
-	return this.onsubmit != null ? this.onsubmit.call( this ) : null;
+	return typeof this.onsubmit == 'function' ? this.onsubmit.call( this ) : null;
 };	
 
 /**
@@ -882,10 +882,11 @@ o3_popup_confirm = function( title, msg, opts, cancelLabel, submitLabel ) {
 	//options
 	options = jQuery.extend({ width: 420,
 								height: 160,
+								/*
 								onbeforeclose: function() {	
 									//if ( window.o3_pop_delete_alert )						
 									//	window.o3_pop_delete_alert.close();						
-								},
+								},*/
 								body: {
 									type: 'html',
 									src: msg
