@@ -13,7 +13,7 @@
 namespace o3\config;
 
 /** O3 Version */
-define('O3_VERSION', '1.0.0b');
+define('O3_VERSION', '1.0.0e');
 
 /** 
 * Defines a named constant if not allready defined
