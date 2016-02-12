@@ -204,7 +204,12 @@ class o3_manifest {
 	* Create and inject manifest attr in the html tag of the document
 	*/
 	public function html_inject( $buffer ) {
+
 		if ( $this->allowed ) {
+			
+			//fix for browser with broken manifest engine
+			header("Cache-Control: no-cache, must-revalidate");
+
 			$manifest_file = $this->create_manifest();
 			if ( $manifest_file !== false ) {
 				$manifest_url = $this->manifest_cache_url.'/'.basename($manifest_file);

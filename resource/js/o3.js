@@ -97,26 +97,29 @@ function o3_ajax_call( url, data, onSuccess, onError, onFail ) {
         dataType: "json",
         success: function (data) {
              
-          if ( data && typeof data.redirect != 'undefined' && data.redirect != '' )
+          if ( data && typeof data.redirect != 'undefined' && data.redirect != '' ) {
             window.location = data.redirect;
+          } else {
 
-          if ( data && data.success === true ) {
-            if ( onSuccess ) {
-              if ( typeof onSuccess == 'function')
-                onSuccess( data );
-            } else {
-               if ( data.success_msg ) 
-                 alert( o3_lang_(data.success_msg) );
-            }  
-          } else {            
-            if ( onError ) {         
-              if ( typeof onError == 'function') 
-                onError( data );
-            } else {
-               if ( data.error_msg ) 
-                 alert( o3_lang_(data.error_msg) );
-            }
-          }         
+            if ( data && data.success === true ) {
+              if ( onSuccess ) {
+                if ( typeof onSuccess == 'function')
+                  onSuccess( data );
+              } else {
+                 if ( data.success_msg ) 
+                   alert( o3_lang_(data.success_msg) );
+              }  
+            } else {            
+              if ( onError ) {         
+                if ( typeof onError == 'function') 
+                  onError( data );
+              } else {
+                 if ( data.error_msg ) 
+                   alert( o3_lang_(data.error_msg) );
+              }
+            }         
+            
+          }
           
         },
         error: function (jqXHR, status, error) {
@@ -280,7 +283,9 @@ function o3_param2url( url, param ){
 * Get basename from path
 */
 function o3_basename( path ) {
-  return path.split(/[\\/]/).pop();
+  if ( typeof path == 'string' && path.length > 0 )
+    return path.split(/[\\/]/).pop();
+  return false;
 };
 
 
