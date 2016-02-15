@@ -25,6 +25,7 @@ $o3_module_data = array_merge( array( 'autoconnect' => O3_MYSQLI_AUTOCONNECT,
 									  'dbname' => O3_MYSQLI_DB,
 									  'port' => O3_MYSQLI_PORT,
 									  'socket' => O3_MYSQLI_SOCKET,
+									  'table_prefix' => O3_MYSQLI_TABLE_PREFIX,
 									  'allow_debug_queries' => O3_MYSQLI_DEBUG_QUERIES ), $o3_module_data );
 
 //create o3 instance in the o3 main object
@@ -34,6 +35,9 @@ $this->mysqli->set_parent( $this );
 //connect if autoconnect set
 if ( isset($o3_module_data['autoconnect']) && $o3_module_data['autoconnect'] === true )
 	$this->mysqli->connect();
+
+//set table name prefix
+$this->mysqli->table_prefix = $o3_module_data['table_prefix'];
 
 //enable/disable queries printed in debug consol if debugging allowed
 $this->mysqli->allow_debug_queries = $o3_module_data['allow_debug_queries'];

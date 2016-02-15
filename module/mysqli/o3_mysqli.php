@@ -46,6 +46,9 @@ class o3_mysqli extends mysqli {
 	/** string Create connection in constuctor  */
 	private $autoconnect = '';
 	
+	/** string Used tables name prefix */
+	public $table_prefix = '';
+
 	/** int Queries total execution duration */
 	public $allow_debug_queries = false;
 
@@ -105,6 +108,17 @@ class o3_mysqli extends mysqli {
 
         return $this->link;
     } 
+
+    /*
+    * Create table name with prefix
+    *
+    * @param string $table_name
+	*
+	* @return string
+    */
+    public function tablename( $table_name ) {
+    	return $this->table_prefix != '' ? $this->table_prefix.$table_name : $table_name;
+    }
 
     /**
 	 * Make select query in table

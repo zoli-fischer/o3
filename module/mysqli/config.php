@@ -34,6 +34,9 @@ config\def('O3_MYSQLI_PORT',ini_get("mysqli.default_port"));
 /** MySql default socket */
 config\def('O3_MYSQLI_SOCKET',ini_get("mysqli.default_socket"));
 
+/** MySql table name prefiex */
+config\def('O3_MYSQLI_TABLE_PREFIX','');
+
 /** Show performed mysqli queries in debug console if debugging allowed */
 config\def('O3_MYSQLI_DEBUG_QUERIES',false);
 
