@@ -208,7 +208,7 @@ class o3_manifest {
 		if ( $this->allowed ) {
 			
 			//fix for browser with broken manifest engine
-			header("Cache-Control: no-cache, must-revalidate");
+			header("Cache-Control: no-cache, must-revalidate, private");
 
 			$manifest_file = $this->create_manifest();
 			if ( $manifest_file !== false ) {

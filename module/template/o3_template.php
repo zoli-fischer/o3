@@ -67,13 +67,9 @@ class o3_template {
 
   		//if argument passed, load template
   		if ( func_num_args() > 0 ) {
-  			$templatename = $args[0];
-
-	  		//remove the first argument that is the template
-			array_shift($args);
-
+  			
 			//load template
-			call_user_func_array( array( $this, 'template' ) , $args );
+			call_user_func_array( array( $this, 'template' ), $args );
 		}		
 
 		//get template contents

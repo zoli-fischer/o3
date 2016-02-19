@@ -20,16 +20,16 @@ class o3_template_controller {
 	public $views = array();
 
 	/** mixed template filepath */
-	private $template_file = ''; 
+	protected $template_file = ''; 
 
 	/** Content of the template file */
-	private $template_content = null;
+	protected $template_content = null;
 
 	/** Content of the template */
-	private $content = null;
+	protected $content = null;
 
 	/** Title of the template */
-	private $title = null;
+	protected $title = null;
 
 	/**
 	 * Constructor of template
