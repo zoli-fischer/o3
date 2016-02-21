@@ -320,53 +320,27 @@ function o3_get_host( $url = null ) {
  * @return mixed Return value or false.
  */
 function o3_get_url( $url, $timeout = 5 ) {
-	$result = false;
+	return o3_url_get_contents( $url, $timeout );
+}
 
-	//check if curl_init available
-    if ( is_callable('curl_init') ) {
-        try {
-			$ch = curl_init();
-
-			curl_setopt($ch, CURLOPT_URL, $url);
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);                    
-               
-            $result = @curl_exec($ch);
-               
-            curl_close($ch);
-        } catch (Exception $e) {
-        }
-    } else {
-    	$context = stream_context_create( 
-	        			array( 
-	        				'http'=> array( 
-	        					'timeout' => $timeout,
-	        				), 
-	        				'https'=> array(
-	        					'timeout' => $timeout,
-	        				),        			
-		        			'ssl' => array(
-						        'verify_peer' => false,
-						    )
-		        		)
-	        		);        	
-        $result = @file_get_contents( $url, false, $context );
-    }
-
-    return $result;
+/**
+ * Get current url
+ * @return string Current URL
+ */
+function o3_current_url() {
+	return o3_get_host().$_SERVER['REQUEST_URI'];
 }
 
 
 //ARRAY
 
 /**
-	* Converts standard object into array
-	* 
-	* @param mixed $d The object to convert
-	*
-	* @return array Returns the converted array
-	*/
+* Converts standard object into array
+* 
+* @param mixed $d The object to convert
+*
+* @return array Returns the converted array
+*/
 function obj2arr($d) {
 	if (is_object($d)) {
 		// Gets the properties of the given object with get_object_vars function
@@ -388,12 +362,12 @@ function obj2arr($d) {
 }
 
 /**
-	* Converts array into standard object
-	* 
-	* @param mixed $d The array to convert
-	*
-	* @return array Returns the converted object
-	*/
+* Converts array into standard object
+* 
+* @param mixed $d The array to convert
+*
+* @return array Returns the converted object
+*/
 function arrayToObject($d) {
 	if (is_array($d)) {
 		// Return array converted to object using __FUNCTION__ (Magic constant) for recursive call		
